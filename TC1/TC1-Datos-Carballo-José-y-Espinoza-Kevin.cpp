@@ -1,8 +1,10 @@
+#include <cctype>
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
 #include <sstream>
 #include <math.h>
+#include <string>
 
 using namespace std;
 
@@ -60,11 +62,66 @@ private:
     Nodo2* siguiente;
     Nodo2* anterior;
 
-    friend class lista;
     friend class listaD;
+    friend class lista;
 };
 
 typedef Nodo2* pnodo2;
+
+
+
+class pila
+{
+private:
+    int Tope;
+    double Pila[5];
+
+public:
+    pila()
+    {
+        Tope = -1;
+        for (int i = 0; i < 5; i++)
+            Pila[i] = 0;
+    }
+
+    bool pilaVacia() { return Tope < 0; }
+    void push(double v);
+    void pop();
+    void imprimir();
+    double top();
+};
+
+
+void pila::push(double v)
+{
+    if (Tope < (5 - 1))
+    {
+        Tope++;
+        Pila[Tope] = v;
+    }
+    else
+        cout << "La pila esta llena.";
+}
+
+void pila::pop()
+{
+    if (!pilaVacia())
+        Tope--;
+    else
+        cout << "La pila esta vacia.";
+}
+
+void pila::imprimir()
+{
+    for (int i = Tope; i >= 0; i--)
+        cout << Pila[i] << " -> ";
+}
+
+double pila::top()
+{
+    int e = Tope;
+    return Pila[e];
+}
 
 
 
@@ -83,7 +140,8 @@ public:
     void BorrarFinal();
     void BorrarPosicion(int pos);
     void Mostrar();
-    void convertirExpresionAPostfijo(pnodo aux, listaD pila);
+    //void convertirExpresionAPostfijo(pnodo aux, pila pila);
+    //void evaluar(pila& pila);
 
 private:
     pnodo2 primero;
@@ -221,11 +279,11 @@ void listaD::BorrarFinal()
 void listaD::BorrarPosicion(int pos)
 {
     if (ListaVacia())
-        cout << "La lista está vacía." << endl;
+        cout << "La lista estï¿½ vacï¿½a." << endl;
     else
     {
         if ((pos > largoLista()) || (pos < 0))
-            cout << "Error en posición." << endl;
+            cout << "Error en posiciï¿½n." << endl;
         else
         {
             if (pos == 1)
@@ -268,96 +326,6 @@ void listaD::Mostrar()
     cout << endl;
 }
 
-void listaD::convertirExpresionAPostfijo(pnodo aux, listaD pila)
-{
-    string tablaPrioridades[] = {
-        "^", "4", "3",
-        "*", "2", "2",
-        "/", "2", "2",
-        "+", "1", "1",
-        "-", "1", "1",
-        "(", "5", "0"
-    };
-
-    while (aux)
-    {
-        if (!isdigit(aux->dato[0]))
-        {
-            if (pila.ListaVacia() || aux->dato == "(")
-                pila.InsertarFinal(aux->dato);
-            else if (aux->dato == ")")
-            {
-                while (pila.primero && pila.primero->dato != "(")
-                {
-                    InsertarFinal(pila.primero->dato);
-                    pila.BorrarInicio();
-                }
-                
-                if (pila.primero && pila.primero->dato == "(")
-                    pila.BorrarInicio();
-            }
-            else
-            {
-                int numPrioridadActual = 0;
-                int numPrioridadEnPila = 0;
-                string prioridadActual = "";
-                string prioridadEnPila = "";
-
-                for (int i = 0; i < 18; i += 3)
-                {
-                    if (aux->dato == tablaPrioridades[i])
-                    {
-                        prioridadActual = tablaPrioridades[i + 1];
-                        pnodo2 anterior = pila.primero;
-                        while (anterior && anterior->siguiente)
-                            anterior = anterior->siguiente;
-
-                        for (int j = 0; j < 18; j += 3)
-                        {
-                            if (anterior && anterior->dato == tablaPrioridades[j])
-                                prioridadEnPila = tablaPrioridades[j + 2];
-                        }
-                        
-                        break;
-                    }
-                }
-                
-                istringstream(prioridadActual) >> numPrioridadActual;
-                istringstream(prioridadEnPila) >> numPrioridadEnPila;
-
-                if (numPrioridadActual > numPrioridadEnPila)
-                    pila.InsertarFinal(aux->dato);
-                else
-                {
-                    InsertarFinal(pila.primero->dato);
-                    pila.BorrarInicio();
-                    pila.InsertarFinal(aux->dato);
-                }
-            }
-        }
-        else
-            InsertarFinal(aux->dato);
-
-        aux = aux->siguiente;
-    }
-
-    while (pila.primero)
-    {
-        if (pila.primero->dato != "(")
-        {
-            InsertarFinal(pila.primero->dato);
-            pila.BorrarInicio();
-        }
-        else
-            pila.BorrarInicio();
-    }
-
-    cout << endl << "Lista Pila:" << endl;
-    pila.Mostrar();
-    cout << endl << "Lista Postfijo:" << endl;
-    Mostrar();
-}
-
 
 
 class lista
@@ -376,7 +344,9 @@ public:
     void BorrarPosicion(int pos);
     void Mostrar();
     void mostrarExpresion(pnodo aux);
+    void convertirExpresionAPostfijo(pnodo aux, pila pila);
     void crearCola(pnodo Cola[]);
+    void evaluar(pila pila);
 
 private:
     pnodo primero;
@@ -509,11 +479,11 @@ void lista::BorrarFinal()
 void lista::BorrarPosicion(int pos)
 {
     if (ListaVacia())
-        cout << "La lista está vacía." << endl;
+        cout << "La lista estï¿½ vacï¿½a." << endl;
     else
     {
         if ((pos > largoLista()) || (pos < 0))
-            cout << "Error en posición." << endl;
+            cout << "Error en posiciï¿½n." << endl;
         else
         {
             if (pos == 1)
@@ -573,6 +543,109 @@ void lista::mostrarExpresion(pnodo aux)
     }
 }
 
+void lista::convertirExpresionAPostfijo(pnodo aux, pila pila)
+{
+    string tablaPrioridades[] = {
+        "^", "4", "3",
+        "*", "2", "2",
+        "/", "2", "2",
+        "+", "1", "1",
+        "-", "1", "1",
+        "(", "5", "0"
+    };
+
+    cout << "\nLista Pila:" << endl;
+
+    while (aux)
+    {
+        if (!isdigit(aux->dato[0]))
+        {
+            if (pila.pilaVacia())
+                pila.push(0.0); // Valor arbitrario, ya que los operadores no importan en este contexto
+            else if (aux->dato == ")")
+            {
+                while (pila.top() != 0.0 && !pila.pilaVacia())
+                {
+                    InsertarFinal(to_string(static_cast<int>(pila.top()))); // Inserta el operador en la lista
+                    pila.pop();
+                }
+                if (pila.top() == 0.0)
+                    pila.pop(); // Elimina el valor arbitrario de la pila
+            }
+            else
+            {
+                int numPrioridadActual = 0;
+                int numPrioridadEnPila = 0;
+
+                string prioridadActual = "";
+                string prioridadEnPila = "";
+
+                for (int i = 0; i < 18; i += 3)
+                {
+                    if (aux->dato == tablaPrioridades[i])
+                    {
+                        prioridadActual = tablaPrioridades[i + 1];
+
+                        if (!pila.pilaVacia())
+                        {
+                            double topElement;
+                            stringstream(pila.top()) >> topElement;
+                            for (int j = 0; j < 18; j += 3)
+                            {
+                                if (topElement == stoi(tablaPrioridades[j]))
+                                    prioridadEnPila = tablaPrioridades[j + 2];
+                            }
+                        }
+
+                        istringstream(prioridadActual) >> numPrioridadActual;
+                        istringstream(prioridadEnPila) >> numPrioridadEnPila;
+
+                        if (numPrioridadActual > numPrioridadEnPila)
+                            pila.push(stod(aux->dato));
+                        else
+                        {
+                            while (!pila.pilaVacia() && numPrioridadActual <= numPrioridadEnPila)
+                            {
+                                InsertarFinal(to_string(static_cast<int>(pila.top())));
+                                pila.pop();
+                                if (!pila.pilaVacia()) {
+                                    double newTopElement;
+                                    stringstream(pila.top()) >> newTopElement;
+                                    for (int j = 0; j < 18; j += 3)
+                                    {
+                                        if (newTopElement == stoi(tablaPrioridades[j]))
+                                            prioridadEnPila = tablaPrioridades[j + 2];
+                                    }
+                                    istringstream(prioridadEnPila) >> numPrioridadEnPila;
+                                }
+                            }
+                            pila.push(stod(aux->dato));
+                        }
+                    }
+                }
+            }
+        }
+        else
+            InsertarFinal(aux->dato);
+
+        aux = aux->siguiente;
+
+        pila.imprimir();
+    }
+
+    while (!pila.pilaVacia())
+    {
+        InsertarFinal(to_string(static_cast<int>(pila.top())));
+        pila.pop();
+    }
+
+    cout << endl << "Lista Postfijo:" << endl;
+    Mostrar();
+}
+
+
+
+
 void lista::crearCola(pnodo Cola[])
 {
     string linea = "";
@@ -608,11 +681,91 @@ void lista::crearCola(pnodo Cola[])
     }
 }
 
+void lista::evaluar(pila pila)
+{
+    pnodo aux = primero;
+    double num1, num2, resultado;
+
+    while (aux != NULL)
+    {
+        if (isdigit(aux->dato[0]))
+        {
+            pila.push(stod(aux->dato));
+            pila.imprimir();
+            cout << endl;
+        }
+        if (aux->dato == "+")
+        {
+            num2 = pila.top();
+            pila.pop();
+            num1 = pila.top();
+            pila.pop();
+            resultado = num1 + num2;
+            pila.push(resultado);
+            pila.imprimir();
+            cout << endl;
+        }
+        if (aux->dato == "-")
+        {
+            num2 = pila.top();
+            pila.pop();
+            num1 = pila.top();
+            pila.pop();
+            resultado = num1 - num2;
+            pila.push(resultado);
+            pila.imprimir();
+            cout << endl;
+        }
+        if (aux->dato == "*")
+        {
+            num2 = pila.top();
+            pila.pop();
+            num1 = pila.top();
+            pila.pop();
+            resultado = num1 * num2;
+            pila.push(resultado);
+            pila.imprimir();
+            cout << endl;
+        }
+        if (aux->dato == "/")
+        {
+            num2 = pila.top();
+            pila.pop();
+            num1 = pila.top();
+            pila.pop();
+            if (num2 == 0) {
+                cout << "";
+            }
+            resultado = num1 / num2;
+            pila.push(resultado);
+            pila.imprimir();
+            cout << endl;
+
+            
+        }
+        if (aux->dato == "^")
+        {
+            num2 = pila.top();
+            pila.pop();
+            num1 = pila.top();
+            pila.pop();
+            resultado = pow(num1, num2);
+            pila.push(resultado);
+            pila.imprimir();
+            cout << endl;
+        }
+
+        aux = aux->siguiente;
+    }
+    pila.imprimir();
+}
+
+
 
 
 int main()
 {
-	lista lista;
+	lista lista, postfijo;
 
     pnodo primeroL1 = new Nodo();
     pnodo primeroL2 = new Nodo();
@@ -624,7 +777,8 @@ int main()
 
     lista.crearCola(Cola);
 
-    listaD pila, postfijo;
+    listaD listaPila;
+    pila pila;
 
     cout << "Tarea Corta #1 - Estructuras de Datos" << endl;
     cout << "Estudiantes:" << endl;
@@ -639,8 +793,8 @@ int main()
 
         cout << endl;
         
-        pila.~listaD();
-        postfijo.~listaD();
+        // pila.~listaD();
+        postfijo.~lista();
         cout << endl;
         cout << "Expresion original:" << endl;
         lista.mostrarExpresion(Cola[expresion]);
@@ -649,6 +803,12 @@ int main()
         for (int i = 0; i < 45; i++)
             cout.put(char(205));
         
+        cout << endl;
+
+        postfijo.evaluar(pila);
+
+        pila.pop();
+
         cout << endl;
     }
     
