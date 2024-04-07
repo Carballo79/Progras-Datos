@@ -1,3 +1,5 @@
+// Estudiantes: José Carballo Martínez y Kevin Espinoza Barrantes
+
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
@@ -804,14 +806,8 @@ int main()
     listaD listaPila;
     pila pila;
 
-    cout << "Tarea Corta #1 - Estructuras de Datos" << endl;
-    cout << "Estudiantes:" << endl;
-    cout << "  + Jose Carballo Martinez" << endl;
-    cout << "  + Kevin Espinoza Barrantes" << endl;
-
     for (int expresion = 0; expresion < 5; expresion++)
     {
-        cout << endl;
         for (int i = 0; i < 50; i++)
             cout.put(char(220));
 

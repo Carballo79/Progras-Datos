@@ -257,7 +257,7 @@ void Pila::imprimir()
 
 int main()
 {
-	cout << "Hola mundo!!" << endl;
+	cout << "Hola mundo!!\n" << endl;
 	
 	system("pause");
 	return 0;
