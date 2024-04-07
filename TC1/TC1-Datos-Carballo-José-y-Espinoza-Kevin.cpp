@@ -221,11 +221,11 @@ void listaD::BorrarFinal()
 void listaD::BorrarPosicion(int pos)
 {
     if (ListaVacia())
-        cout << "La lista está vacía." << endl;
+        cout << "La lista esta vacia." << endl;
     else
     {
         if ((pos > largoLista()) || (pos < 0))
-            cout << "Error en posición." << endl;
+            cout << "Error en posicion." << endl;
         else
         {
             if (pos == 1)
@@ -474,11 +474,11 @@ void lista::BorrarFinal()
 void lista::BorrarPosicion(int pos)
 {
     if (ListaVacia())
-        cout << "La lista está vacía." << endl;
+        cout << "La lista esta vacia." << endl;
     else
     {
         if ((pos > largoLista()) || (pos < 0))
-            cout << "Error en posición." << endl;
+            cout << "Error en posicion." << endl;
         else
         {
             if (pos == 1)
@@ -747,7 +747,7 @@ void lista::evaluar(pila pila)
             
             if (num2 == 0)
             {
-                cout << "Error: División entre 0." << endl;
+                cout << "Error: Division entre 0." << endl;
                 divisionEntreCero = true;
                 break;
             }
@@ -789,7 +789,7 @@ string lista::to_string(double valor)
 
 int main()
 {
-    lista lista, listaPostfijo;
+    lista listaExpresiones, listaPostfijo;
 
     pnodo primeroL1 = new Nodo();
     pnodo primeroL2 = new Nodo();
@@ -799,7 +799,7 @@ int main()
 
     pnodo Cola[5] = {primeroL1, primeroL2, primeroL3, primeroL4, primeroL5};
 
-    lista.crearCola(Cola);
+    listaExpresiones.crearCola(Cola);
 
     listaD listaPila;
     pila pila;
@@ -821,7 +821,7 @@ int main()
         listaPostfijo.~lista();
         cout << endl;
         cout << "Expresion original:" << endl;
-        lista.mostrarExpresion(Cola[expresion]);
+        listaExpresiones.mostrarExpresion(Cola[expresion]);
         listaPostfijo.convertirExpresionAPostfijo(Cola[expresion], listaPila);
 
         for (int i = 0; i < 50; i++)
@@ -841,3 +841,4 @@ int main()
     system("pause");
     return 0;
 }
+
