@@ -80,6 +80,8 @@ class Cola
 		void cargar(string nombreArchivo);
 		void imprimir();
 		void imprimir(int i);
+		int prioridadFuera(string c);
+		int prioridadDentro(string c);
 		void infija(pnodoBinario raiz);
 		void postfija(pnodoBinario raiz);
 		void prefija(pnodoBinario raiz);
@@ -159,6 +161,30 @@ void Cola::imprimir(int i)
 	}
 
 	cout << temp->valor << endl;
+}
+
+int Cola::prioridadFuera(string c)
+{
+	if (c == "^")
+		return 4;
+	else if (c == "*" || c == "/")
+		return 2;
+	else if (c == "+" || c == "-")
+		return 1;
+	else
+		return 5;
+}
+
+int Cola::prioridadDentro(string c)
+{
+	if (c == "^")
+		return 3;
+	else if ((c == "*") || (c == "/"))
+		return 2;
+	else if ((c == "+") || (c == "-"))
+		return 1;
+	else
+		return 0;
 }
 
 void Cola::postfija(pnodoBinario raiz)
