@@ -5,7 +5,6 @@
 #include <math.h>
 #include <string.h>
 #include <fstream>
-#include <cctype>
 #include <sstream>
 
 using namespace std;
@@ -106,7 +105,7 @@ public:
     bool ColaVacia() { return (fondo < frente); }
     void crearCola(pnodoLista cola[]);
     void imprimir();
-    void imprimir(int i);
+    void imprimir(int i, bool bandera);
     bool esNumero(string str);
     string intAString(int num);
     pnodoBinario crearArbolExpresion(int i);
@@ -326,17 +325,24 @@ void Cola::imprimir()
     }
 }
 
-void Cola::imprimir(int i)
+void Cola::imprimir(int i, bool conFlechas)
 {
     pnodoLista temp = cola[i];
+    bool bandera = true;
 
-    while (temp->siguiente != NULL)
+    while (temp != NULL)
     {
-        cout << temp->valor << " -> ";
+        if (!bandera && conFlechas)
+            cout << " -> ";
+
+        bandera = false;
+
+        cout << temp->valor;
+
         temp = temp->siguiente;
     }
 
-    cout << temp->valor << endl;
+    cout << endl;
 }
 
 bool Cola::esNumero(string str)
@@ -366,10 +372,10 @@ pnodoBinario Cola::crearArbolExpresion(int i)
     string nombreArchivo, inicio, valor, texto;
     Pila pilaOperadores, resultados;
 
-	nombreArchivo = "Análisis" + intAString(i + 1) + ".txt";
+	nombreArchivo = "Analisis-Arch" + intAString(i + 1) + ".txt";
   	archivo.open(nombreArchivo.c_str());
   	
-  	nombreArchivo = "Evaluación" + intAString(i + 1) + ".txt";
+  	nombreArchivo = "Evaluacion-Arch" + intAString(i + 1) + ".txt";
   	archivoResultado.open(nombreArchivo.c_str());
   	
   	inicio = "Orden de los operando en los que serán evaluados del archivo Arch"
@@ -581,7 +587,10 @@ int main()
 
     for (int i = 0; i < 5; i++)
 	{
-        cola.imprimir(i);
+        cout << "Expresion original: ";
+		cola.imprimir(i, false);
+		cout << endl;
+		cola.imprimir(i, true);
         pnodoBinario arbolExpresion = cola.crearArbolExpresion(i);
         cout << endl << endl;
     }
