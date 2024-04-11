@@ -1,0 +1,7 @@
+Orden de los operando en los que serán evaluados del archivo Arch4.txt
+/
+^
+*
+/
+-
+/

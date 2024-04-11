@@ -1,0 +1,6 @@
+Orden de los operando en los que serán evaluados del archivo Arch2.txt
+*
+-
+/
++
++

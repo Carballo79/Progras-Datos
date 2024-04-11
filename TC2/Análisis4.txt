@@ -1,0 +1,63 @@
+Operando encontrado: (
+Pila vacía. Se agrega a la pila de operadores: (
+Operando encontrado: (
+	Como PFp de ( es mayor o igual que PDp de (, ( se agrega a la pila de operadores.
+Se encontró el número: 4, entonces se agrega directamente a la pila de resultados.
+Operando encontrado: *
+	Como PFp de * es mayor o igual que PDp de (, * se agrega a la pila de operadores.
+Operando encontrado: (
+	Como PFp de ( es mayor o igual que PDp de *, ( se agrega a la pila de operadores.
+Operando encontrado: (
+	Como PFp de ( es mayor o igual que PDp de (, ( se agrega a la pila de operadores.
+Se encontró el número: 15, entonces se agrega directamente a la pila de resultados.
+Operando encontrado: /
+	Como PFp de / es mayor o igual que PDp de (, / se agrega a la pila de operadores.
+Se encontró el número: 2, entonces se agrega directamente a la pila de resultados.
+Como se encontró un ), se vacía la pila de operadores hasta encontrar un (.
+	Sale de la pila de operadores: /
+	Sale de la pila de resultados la hoja derecha: 2
+	Sale de la pila de resultados la hoja izquierda: 15
+	Se agrega a la pila de resultados: / con sus hojas.
+	Se encuentra un paréntesis, así que, ( se saca de la pila de operadores.
+Operando encontrado: ^
+	Como PFp de ^ es mayor o igual que PDp de (, ^ se agrega a la pila de operadores.
+Se encontró el número: 3, entonces se agrega directamente a la pila de resultados.
+Como se encontró un ), se vacía la pila de operadores hasta encontrar un (.
+	Sale de la pila de operadores: ^
+	Sale de la pila de resultados la hoja derecha: 3
+	Sale de la pila de resultados la hoja izquierda: /
+	Se agrega a la pila de resultados: ^ con sus hojas.
+	Se encuentra un paréntesis, así que, ( se saca de la pila de operadores.
+Como se encontró un ), se vacía la pila de operadores hasta encontrar un (.
+	Sale de la pila de operadores: *
+	Sale de la pila de resultados la hoja derecha: ^
+	Sale de la pila de resultados la hoja izquierda: 4
+	Se agrega a la pila de resultados: * con sus hojas.
+	Se encuentra un paréntesis, así que, ( se saca de la pila de operadores.
+Operando encontrado: /
+	Como PFp de / es mayor o igual que PDp de (, / se agrega a la pila de operadores.
+Operando encontrado: (
+	Como PFp de ( es mayor o igual que PDp de /, ( se agrega a la pila de operadores.
+Se encontró el número: 5, entonces se agrega directamente a la pila de resultados.
+Operando encontrado: -
+	Como PFp de - es mayor o igual que PDp de (, - se agrega a la pila de operadores.
+Se encontró el número: 6, entonces se agrega directamente a la pila de resultados.
+Operando encontrado: /
+	Como PFp de / es mayor o igual que PDp de -, / se agrega a la pila de operadores.
+Se encontró el número: 5, entonces se agrega directamente a la pila de resultados.
+Como se encontró un ), se vacía la pila de operadores hasta encontrar un (.
+	Sale de la pila de operadores: /
+	Sale de la pila de resultados la hoja derecha: 5
+	Sale de la pila de resultados la hoja izquierda: 6
+	Se agrega a la pila de resultados: / con sus hojas.
+	Sale de la pila de operadores: -
+	Sale de la pila de resultados la hoja derecha: /
+	Sale de la pila de resultados la hoja izquierda: 5
+	Se agrega a la pila de resultados: - con sus hojas.
+	Se encuentra un paréntesis, así que, ( se saca de la pila de operadores.
+Como se encontró un ), se vacía la pila de operadores hasta encontrar un (.
+	Sale de la pila de operadores: /
+	Sale de la pila de resultados la hoja derecha: -
+	Sale de la pila de resultados la hoja izquierda: *
+	Se agrega a la pila de resultados: / con sus hojas.
+	Se encuentra un paréntesis, así que, ( se saca de la pila de operadores.
