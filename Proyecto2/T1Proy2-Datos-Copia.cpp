@@ -49,7 +49,7 @@ typedef NodoABBPasillo *pnodoABBPasillo;
 class PilaPasillos
 {
 public:
-    PilaPasillos(): plista(NULL) {}
+    PilaPasillos() : plista(NULL) {}
 
     void Push(pnodoPasillo);
     void Mostrar();
@@ -59,6 +59,21 @@ public:
     
     pnodoPasillo plista;
 };
+
+
+class NodoCola
+{
+public:
+    NodoCola(pnodoPasillo pasillo) : pasillo(pasillo), siguiente(NULL) {}
+
+private:
+    pnodoPasillo pasillo;
+    NodoCola* siguiente;
+
+    friend class ColaPasillos;
+};
+
+typedef NodoCola *pnodoCola;
 
 
 class NodoAVLProPasillo
@@ -124,7 +139,7 @@ private:
     friend class ListaCircularCiudades;
 };
 
-typedef NodoCliente *pnodoCliente;
+typedef NodoCliente* pnodoCliente;
 
 
 class NodoAdmin
@@ -158,7 +173,7 @@ private:
     friend class ListaCircularCiudades;
 };
 
-typedef NodoAdmin *pnodoAdmin;
+typedef NodoAdmin* pnodoAdmin;
 
 
 class NodoABBCiudad
@@ -494,6 +509,72 @@ void PilaPasillos::Mostrar()
 }
 
 
+class ColaPasillos
+{
+public:
+    ColaPasillos() : frente(NULL), fondo(NULL) {}
+    ~ColaPasillos();
+
+    bool ColaVacia() { return frente == NULL; }
+    void encolar(pnodoPasillo pasillo);
+    pnodoPasillo desencolar();
+    void imprimir();
+
+private:
+    pnodoCola frente;
+    pnodoCola fondo;
+};
+
+ColaPasillos::~ColaPasillos()
+{
+    while (!ColaVacia())
+        desencolar();
+}
+
+void ColaPasillos::encolar(pnodoPasillo pasillo)
+{
+    NodoCola* nuevoNodo = new NodoCola(pasillo);
+    
+    if (ColaVacia())
+    {
+        frente = nuevoNodo;
+        fondo = nuevoNodo;
+    }
+    else
+    {
+        fondo->siguiente = nuevoNodo;
+        fondo = nuevoNodo;
+    }
+}
+
+pnodoPasillo ColaPasillos::desencolar()
+{
+    if (ColaVacia())
+    {
+        cout << "La cola esta vacia, no se puede desencolar." << endl;
+        return NULL;
+    }
+
+    pnodoCola nodoAEliminar = frente;
+    pnodoPasillo pasillo = nodoAEliminar->pasillo;
+    frente = frente->siguiente;
+    delete nodoAEliminar;
+    
+    return pasillo;
+}
+
+void ColaPasillos::imprimir()
+{
+    pnodoCola act = frente;
+
+    while (act != NULL)
+    {
+        cout << act->pasillo->getCodPasillo() << "; "<< act->pasillo->getNombre() << endl;
+        act = act->siguiente;
+    }
+}
+
+
 class AVLProPasillo
 {
 public:
@@ -517,13 +598,13 @@ private:
 void AVLProPasillo::insertarProducto(int codPasillo, int codProducto,
     string nombre, ABBPasillos &arbolPasillos)
 {
-    // Verifica si el producto ya está repetido
+    // Verifica si el producto ya est� repetido
     if (!productoRepetido(codProducto))
     {
         if (arbolPasillos.pasilloRepetido(codPasillo))
         {
-            // Inserta al inicio después de las validaciones
-            // InsertarFinal(codPasillo, codProducto, nombre);
+            // Inserta al inicio despu�s de las validaciones
+            //InsertarFinal(codPasillo, codProducto, nombre);
             
             cout << "\nProducto insertado exitosamente." << endl;
 	        cout << "\nProducto nuevo: " << codPasillo << "; " << codProducto << "; "
@@ -674,7 +755,7 @@ HashingClientes::~HashingClientes()
     delete[] tablaHash;
 }
 
-// Método para comprobar si el hashing abierto está vacío
+// M�todo para comprobar si el hashing abierto est� vac�o
 bool HashingClientes::hashingVacio()
 {
     for (int i = 0; i < 13; i++)
@@ -697,12 +778,12 @@ void HashingClientes::insertarCliente(int cedula, string nombre, int codCiudad,
         return;
     }
         
-    // Aplica la función de hashing
+    // Aplica la funci�n de hashing
     int indice = funcionHash(cedula);
 
     pnodoCliente clienteNuevo = new NodoCliente(cedula, nombre, codCiudad, telefono, correo);
 
-    // Verifica si ya hay un nodo en esa posición
+    // Verifica si ya hay un nodo en esa posici�n
     if (tablaHash[indice] == NULL)
         tablaHash[indice] = clienteNuevo;
     else
@@ -857,7 +938,7 @@ HashingAdmins::~HashingAdmins()
     delete[] tablaHash;
 }
 
-// Método para comprobar si el hashing abierto est� vac�o
+// M�todo para comprobar si el hashing abierto est� vac�o
 bool HashingAdmins::hashingVacio()
 {
     for (int i = 0; i < 13; i++)
@@ -880,12 +961,12 @@ void HashingAdmins::insertarAdmin(int cedula, string nombre, int codCiudad,	stri
         return;
     }
     
-    // Aplica la función de hashing
+    // Aplica la funci�n de hashing
     int indice = funcionHash(cedula);
 
     pnodoAdmin nuevoAdmin = new NodoAdmin(cedula, nombre, codCiudad, telefono, correo);
 
-    // Verifica si ya hay un nodo en esa posición
+    // Verifica si ya hay un nodo en esa posici�n
     if (tablaHash[indice] == NULL)
         tablaHash[indice] = nuevoAdmin;
     else
@@ -1322,7 +1403,7 @@ string intAString(int num)
     return convertir.str();
 }
 
-// Función que convierte "1" o "0" a booleano
+// Funci�n que convierte "1" o "0" a booleano
 bool stringABool(string str)
 {
     istringstream iss(str);
@@ -1388,7 +1469,7 @@ void crearArbolProPasillo(AVLProPasillo &arbolProPasillo, ABBPasillos &arbolPasi
 
     while (getline(archivo, linea))
     {
-        // Ignora líneas vacías
+        // Ignora l�neas vac�as
         if (linea == "")
             continue;
 
@@ -1402,7 +1483,7 @@ void crearArbolProPasillo(AVLProPasillo &arbolProPasillo, ABBPasillos &arbolPasi
         getline(ss, nombre, ';');
         ss >> ws;
 
-        // Inserta en la lista doble de productos después de las validaciones
+        // Inserta en la lista doble de productos despu�s de las validaciones
         arbolProPasillo.insertarProducto(stringAInt(codPasillo), stringAInt(codProducto),
             nombre, arbolPasillos);
     }
@@ -1424,7 +1505,7 @@ void crearHashingClientes(HashingClientes &hashClientes, ABBCiudades &arbolCiuda
 
     while (getline(archivo, linea))
 	{
-        // Ignora líneas vacías
+        // Ignora l�neas vac�as
         if (linea == "")
             continue;
 
@@ -1443,7 +1524,7 @@ void crearHashingClientes(HashingClientes &hashClientes, ABBCiudades &arbolCiuda
         ss >> ws;
 
         if (arbolCiudades.ciudadRepetida(stringAInt(codCiudad)))
-			// Inserta en el hash de clientes después de las validaciones
+			// Inserta en el hash de clientes despu�s de las validaciones
 	        hashClientes.insertarCliente(stringAInt(cedula), nombre, stringAInt(codCiudad),
 				telefono, correo);
 		else
@@ -1486,7 +1567,7 @@ void crearHashingAdmins(HashingAdmins &hashAdmins, ABBCiudades &arbolCiudades)
         ss >> ws;
 
 		if (arbolCiudades.ciudadRepetida(stringAInt(codCiudad)))
-			// Inserta en el hash de administradores después de las validaciones
+			// Inserta en el hash de administradores despu�s de las validaciones
 	        hashAdmins.insertarAdmin(stringAInt(cedula), nombre, stringAInt(codCiudad),
 				telefono, correo);
 		else
@@ -1510,7 +1591,7 @@ void crearArbolCiudades(ABBCiudades &arbolCiudades)
 	
 	while (getline(archivo, linea))
 	{
-	    // Ignora líneas vacías
+	    // Ignora l�neas vac�as
 	    if (linea == "")
 	        continue;
 
@@ -1522,7 +1603,7 @@ void crearArbolCiudades(ABBCiudades &arbolCiudades)
         getline(ss, nombre, ';');
         ss >> ws;
 
-        // Inserta en el árbol de ciudades después de las validaciones
+        // Inserta en el arbol de ciudades despu�s de las validaciones
         arbolCiudades.insertarCiudad(stringAInt(codCiudad), nombre);
 	}
 }
@@ -1537,7 +1618,7 @@ void crearReporte(string nombreReporte, string distintivo, string texto)
 	
 	archivoNuevo.open(titulo.c_str(), ios::out);
 	
-	// Comprueba si el archivo se abrió correctamente
+	// Comprueba si el archivo se abri� correctamente
     if (!archivoNuevo.is_open())
     {
         cout << "\nError al abrir el archivo para escritura.\n" << endl;
@@ -1681,7 +1762,7 @@ void ABBPasillos::reportePasilloMasVisitado()
     pnodoPasillo temp = raiz;
     int maxVisitas = 0;
 
-    // Encuentra el n�mero máximo de visitas
+    // Encuentra el n�mero m�ximo de visitas
     while (temp != NULL)
 	{
         if (temp->contVisitas > maxVisitas)
@@ -1692,7 +1773,7 @@ void ABBPasillos::reportePasilloMasVisitado()
 
     temp = raiz;
 
-    // Agrega al texto los pasillos más visitados
+    // Agrega al texto los pasillos m�s visitados
     while (temp != NULL)
 	{
         if (temp->contVisitas == maxVisitas)
@@ -1724,7 +1805,7 @@ void ABBPasillos::reportePasilloMenosVisitado()
     pnodoPasillo temp = raiz;
     int minVisitas = -1;
 
-    // Encuentra el n�mero mínimo de visitas
+    // Encuentra el n�mero m�nimo de visitas
     while (temp != NULL)
 	{
         if (temp->contVisitas >= 1)
@@ -1770,7 +1851,7 @@ void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
     pnodoProPasillo temp = primero;
     int maxBusquedas = 0;
 
-    // Encuentra el número máximo de b�squedas
+    // Encuentra el n�mero m�ximo de b�squedas
     while (temp != NULL)
 	{
         if (temp->contBusquedas > maxBusquedas)
@@ -1781,7 +1862,7 @@ void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
 
     temp = primero;
 
-	// Agrega al texto los productos más buscados
+	// Agrega al texto los productos m�s buscados
     while (temp != NULL)
 	{
         if (temp->contBusquedas == maxBusquedas)
@@ -2594,7 +2675,7 @@ void menuMantenimientoBD(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &
     } while (opcion != 5);
 }
 
-void menuReportes(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arbolProPasillo, HashingClientes &hashClientes)
+void menuReportes(int opcion)
 {
 	do
     {
@@ -2622,12 +2703,10 @@ void menuReportes(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arbolPr
         {
             case 1:
                 system(LIMPIAR);
-                arbolPasillos.reportePasilloMasVisitado();
 				break;
 
             case 2:
                 system(LIMPIAR);
-                arbolPasillos.reportePasilloMenosVisitado();
 				break;
 
             case 3:
@@ -2664,17 +2743,14 @@ void menuReportes(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arbolPr
 
             case 11:
                 system(LIMPIAR);
-                arbolProPasillo.reporteProductosPasillo();
 				break;
 
             case 12:
                 system(LIMPIAR);
-                hashClientes.reporteClientes();
 				break;
 
             case 13:
                 system(LIMPIAR);
-                arbolPasillos.reportePasillos();
 				break;
 
 			case 14:
@@ -2767,7 +2843,7 @@ int main()
                 
                             case 5: // Reportes
                                 system(LIMPIAR);
-                                menuReportes(opcion3, arbolPasillos, arbolProPasillo, hashClientes);
+                                menuReportes(opcion3);
                                 break;
                 
                             case 6: // Salir
