@@ -320,7 +320,7 @@ void NodoABBPasillo::InsertaBinario(int llave, string nombre)
         {
             Hizq = new NodoABBPasillo(llave, nombre);
             cout << "\nPasillo insertado exitosamente." << endl;
-            cout << "\nPasillo nuevo: " << llave << "; " << nombre << endl << endl;
+            cout << "\nPasillo nuevo:\n" << llave << "; " << nombre << endl << endl;
         }
         else
             Hizq->InsertaBinario(llave, nombre);
@@ -331,7 +331,7 @@ void NodoABBPasillo::InsertaBinario(int llave, string nombre)
         {
             Hder = new NodoABBPasillo(llave, nombre);
             cout << "\nPasillo insertado exitosamente." << endl;
-            cout << "\nPasillo nuevo: " << llave << "; " << nombre << endl << endl;
+            cout << "\nPasillo nuevo:\n" << llave << "; " << nombre << endl << endl;
         }
         else
             Hder->InsertaBinario(llave, nombre);
@@ -346,7 +346,7 @@ void ABBPasillos::insertarPasillo(int llave, string nombre)
     {
         raiz = new NodoABBPasillo(llave, nombre);
         cout << "\nPasillo insertado exitosamente." << endl;
-        cout << "\nPasillo nuevo: " << llave << "; " << nombre << endl << endl;
+        cout << "\nPasillo nuevo:\n" << llave << "; " << nombre << endl << endl;
     }
     else
         raiz->InsertaBinario(llave, nombre);
@@ -385,7 +385,7 @@ void ABBPasillos::modificarPasillo(int codPasillo, string nombre)
         pasillo->nombre = nombre;
 
         cout << "\nPasillo modificado exitosamente." << endl;
-        cout << "\nPasillo modificado: " << codPasillo << "; " << nombre << endl << endl;
+        cout << "\nPasillo modificado:\n" << codPasillo << "; " << nombre << endl << endl;
     }
     else
 		cout << "\nPasillo no encontrado.\n";
@@ -482,7 +482,7 @@ void ABBPasillos::reportePasilloMenosVisitado()
     pnodoPasillo temp = raiz;
     int minVisitas = -1;
 
-    // Encuentra el n�mero mínimo de visitas
+    // Encuentra el número mínimo de visitas
     while (temp != NULL)
 	{
         if (temp->contVisitas >= 1)
@@ -706,7 +706,7 @@ void AVLProPasillo::insertarProducto(int codPasillo, int codProducto,
             // InsertarFinal(codPasillo, codProducto, nombre);
             
             cout << "\nProducto insertado exitosamente." << endl;
-	        cout << "\nProducto nuevo: " << codPasillo << "; " << codProducto << "; "
+	        cout << "\nProducto nuevo:\n" << codPasillo << "; " << codProducto << "; "
                 << nombre << endl << endl;
 		}
 		else
@@ -771,7 +771,7 @@ void AVLProPasillo::modificarProducto(int codProducto, string nombre)
     productoPasillo->nombre = nombre;
 
     cout << "\nProducto modificado exitosamente." << endl;
-    cout << "\nProducto modificado: " << codProducto << "; " << nombre << endl << endl;
+    cout << "\nProducto modificado:\n" << codProducto << "; " << nombre << endl << endl;
 }
 
 AVLProPasillo::~AVLProPasillo()
@@ -945,7 +945,7 @@ bool HashingClientes::hashingVacio()
     return true;
 }
 
-// M�todo que inserta un nuevo cliente en la tabla hash
+// Método que inserta un nuevo cliente en la tabla hash
 void HashingClientes::insertarCliente(int cedula, string nombre, int codCiudad,
 	string telefono, string correo)
 {
@@ -976,7 +976,7 @@ void HashingClientes::insertarCliente(int cedula, string nombre, int codCiudad,
     }
     
     cout << "\nCliente insertado exitosamente." << endl;
-    cout << "\nCliente nuevo: " << indice << " -> " << cedula << "; " << nombre << "; "
+    cout << "\nCliente nuevo:\n" << indice << " -> " << cedula << "; " << nombre << "; "
         << codCiudad << "; " << telefono << "; " << correo << endl << endl;
 }
 
@@ -1016,7 +1016,7 @@ void HashingClientes::modificarCliente(int cedula, string nombre, int codCiudad,
     cliente->correo = correo;
     
     cout << "\nCliente modificado exitosamente." << endl;
-    cout << "\nCliente modificado: " << funcionHash(cedula) << " -> " << cedula << "; "
+    cout << "\nCliente modificado:\n" << funcionHash(cedula) << " -> " << cedula << "; "
         << nombre << "; " << codCiudad << "; " << telefono << "; " << correo << endl << endl;
 }
 
@@ -1173,7 +1173,7 @@ void HashingAdmins::insertarAdmin(int cedula, string nombre, int codCiudad,	stri
     }
     
     cout << "\nAdministrador insertado exitosamente." << endl;
-    cout << "\nAdministrador nuevo: " << indice << " -> " << cedula << "; " << nombre << "; "
+    cout << "\nAdministrador nuevo:\n" << indice << " -> " << cedula << "; " << nombre << "; "
         << codCiudad << "; " << telefono << "; " << correo << endl << endl;
 }
 
@@ -1237,7 +1237,7 @@ void HashingAdmins::modificarAdmin(int cedula, string nombre, int codCiudad, str
     admin->correo = correo;
     
     cout << "\nAdministrador modificado exitosamente." << endl;
-    cout << "\nAdministrador modificado: " << funcionHash(cedula) << " -> " << cedula << "; "
+    cout << "\nAdministrador modificado:\n" << funcionHash(cedula) << " -> " << cedula << "; "
         << nombre << "; " << codCiudad << "; " << telefono << "; " << correo << endl << endl;
 }
 
@@ -1330,7 +1330,7 @@ void NodoABBCiudad::InsertaBinario(int llave, string nombre)
         {
             Hizq = new NodoABBCiudad(llave, nombre);
             cout << "\nCiudad insertada exitosamente." << endl;
-            cout << "\nCiudad nueva: " << llave << "; " << nombre << endl << endl;
+            cout << "\nCiudad nueva:\n" << llave << "; " << nombre << endl << endl;
         }
         else
             Hizq->InsertaBinario(llave, nombre);
@@ -1341,7 +1341,7 @@ void NodoABBCiudad::InsertaBinario(int llave, string nombre)
         {
             Hder = new NodoABBCiudad(llave, nombre);
             cout << "\nCiudad insertada exitosamente." << endl;
-            cout << "\nCiudad nueva: " << llave << "; " << nombre << endl << endl;
+            cout << "\nCiudad nueva:\n" << llave << "; " << nombre << endl << endl;
         }
         else
             Hder->InsertaBinario(llave, nombre);
@@ -1356,7 +1356,7 @@ void ABBCiudades::insertarCiudad(int llave, string nombre)
     {
         raiz = new NodoABBCiudad(llave, nombre);
         cout << "\nCiudad insertada exitosamente." << endl;
-        cout << "\nCiudad nueva: " << llave << "; " << nombre << endl << endl;
+        cout << "\nCiudad nueva:\n" << llave << "; " << nombre << endl << endl;
     }
     else
         raiz->InsertaBinario(llave, nombre);
@@ -1395,7 +1395,7 @@ void ABBCiudades::modificarCiudad(int codCiudad, string nombre)
         ciudad->nombre = nombre;
 
         cout << "\nCiudad modificada exitosamente." << endl;
-        cout << "\nCiudad modificada: " << codCiudad << "; " << nombre << endl << endl;
+        cout << "\nCiudad modificada:\n" << codCiudad << "; " << nombre << endl << endl;
     }
     else
 		cout << "\nCiudad no encontrada.\n";
@@ -1697,7 +1697,7 @@ void crearHashingAdmins(HashingAdmins &hashAdmins, ABBCiudades &arbolCiudades)
 
     while (getline(archivo, linea))
 	{
-        // Ignora l�neas vac�as
+        // Ignora líneas vacías
         if (linea == "")
             continue;
 
@@ -1996,11 +1996,8 @@ void menuBuscarClientes(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &a
 				pnodoPasillo pasilloBuscado = arbolPasillos.buscarPasillo(codPasilloABuscar);
 				
                 if (pasilloBuscado != NULL)
-				{
-                    cout << "\nPasillo encontrado:" << endl;
-                    cout << "CodPasillo: " << pasilloBuscado->getCodPasillo() << endl;
-                    cout << "Nombre: " << pasilloBuscado->getNombre() << endl << endl;
-                }
+				    cout << "\nPasillo encontrado:\n" << pasilloBuscado->getCodPasillo() << "; "
+                        << pasilloBuscado->getNombre() << endl << endl;
 				else
                     cout << "\nPasillo con codigo " << codPasilloABuscar << " no encontrado.\n" << endl;
                 break;
@@ -2016,12 +2013,8 @@ void menuBuscarClientes(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &a
 				pnodoProPasillo productoBuscado = arbolProPasillo.buscarProducto(codProductoABuscar);
 				
                 if (productoBuscado != NULL)
-				{
-                    cout << "\nProducto encontrado:" << endl;
-                    cout << "CodPasillo: " << productoBuscado->getCodPasillo() << endl;
-                    cout << "CodProducto: " << productoBuscado->getCodProducto() << endl;
-                    cout << "Nombre: " << productoBuscado->getNombre() << endl << endl;
-                }
+				    cout << "\nProducto encontrado:\n" << productoBuscado->getCodPasillo() << "; "
+                        << productoBuscado->getCodProducto() << "; " << productoBuscado->getNombre() << endl << endl;
 				else
                     cout << "\nPasillo con codigo " << codProductoABuscar << " no encontrado.\n" << endl;
                 break;
@@ -2091,10 +2084,10 @@ void menuBuscarAdmins(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arb
 				pnodoPasillo pasilloBuscado = arbolPasillos.buscarPasillo(codPasilloABuscar);
 				
                 if (pasilloBuscado != NULL)
-                    cout << "\nPasillo encontrado: " << pasilloBuscado->getCodPasillo() << "; "
+                    cout << "\nPasillo encontrado:\n" << pasilloBuscado->getCodPasillo() << "; "
                         << pasilloBuscado->getNombre() << endl << endl;
 				else
-                    cout << "\nPasillo con codigo " << codPasilloABuscar << " no encontrado.\n" << endl;
+                    cout << "\nPasillo no encontrado.\n" << endl;
                 break;
 			}
 			
@@ -2108,10 +2101,10 @@ void menuBuscarAdmins(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arb
 				pnodoProPasillo productoBuscado = arbolProPasillo.buscarProducto(codProductoABuscar);
 				
                 if (productoBuscado != NULL)
-                    cout << "\nProducto encontrado:" << productoBuscado->getCodPasillo() << "; "
+                    cout << "\nProducto encontrado:\n" << productoBuscado->getCodPasillo() << "; "
                         << productoBuscado->getCodProducto() << "; " << productoBuscado->getNombre() << endl << endl;
 				else
-                    cout << "\nPasillo con codigo " << codProductoABuscar << " no encontrado.\n" << endl;
+                    cout << "\nPasillo no encontrado.\n" << endl;
                 break;
 			}
 
@@ -2222,7 +2215,7 @@ void menuBuscarAdmins(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arb
 				pnodoCiudad ciudadBuscada = arbolCiudades.buscarCiudad(codCiudadABuscar);
 				
                 if (ciudadBuscada != NULL)
-                    cout << "\nCiudad encontrada: " << ciudadBuscada->getCodCiudad() << "; "
+                    cout << "\nCiudad encontrada:\n" << ciudadBuscada->getCodCiudad() << "; "
                         << ciudadBuscada->getNombre() << endl << endl;
                 else
                     cout << "\nCiudad no encontrada.\n" << endl;
