@@ -206,6 +206,73 @@ public:
 
 
 
+int stringAInt(string str)
+{
+    istringstream iss(str);
+    int res;
+    
+    if (!(iss >> res))
+	{
+        cout << "\nNo se pudo convertir la cadena a entero.\n" << endl;
+        return 0;
+    }
+    
+    return res;
+}
+
+string intAString(int num)
+{
+    ostringstream convertir;
+
+    convertir << num;
+
+    return convertir.str();
+}
+
+// Función que convierte "1" o "0" a booleano
+bool stringABool(string str)
+{
+    istringstream iss(str);
+    bool res;
+
+    if (str == "1")
+        return true;
+    else if (str == "0")
+        return false;
+    else
+    {
+        cout << "\nNo se puede convertir la cadena a bool.\n" << endl;
+        return false;
+    }
+}
+
+
+void crearReporte(string nombreReporte, string distintivo, string texto)
+{
+	ofstream archivoNuevo;
+	
+	string titulo = "Reporte-" + nombreReporte + distintivo + ".txt";
+	
+	archivoNuevo.open(titulo.c_str(), ios::out);
+	
+	// Comprueba si el archivo se abrió correctamente
+    if (!archivoNuevo.is_open())
+    {
+        cout << "\nError al abrir el archivo para escritura.\n" << endl;
+        return;
+    }
+	
+	archivoNuevo << "Reporte: ";
+	archivoNuevo << nombreReporte << endl << endl;
+	archivoNuevo << texto << endl;
+	
+	cout << "Reporte " << nombreReporte << " creado con exito.\n" << endl;
+	
+	archivoNuevo.close();
+}
+
+
+
 class ABBPasillos
 {
 public:
@@ -339,6 +406,119 @@ void ABBPasillos::mostrarPasillos(pnodoABBPasillo arbol, int cont)
     }
 }
 
+void ABBPasillos::reportePasillos()
+{
+    string nombreReporte = "Pasillos";
+    string texto = "";
+
+    // Itera sobre la lista de pasillos y guarda en el archivo
+    pnodoPasillo temp = raiz;
+
+	while (temp != NULL)
+	{
+        texto += "-> " + intAString(temp->codPasillo) + "; " + temp->nombre + "\n\n";
+
+        temp = temp->siguiente;
+    }
+
+    if (!ArbolVacio())
+    {
+	    cout << "Reporte: " << nombreReporte << endl << endl;
+	    cout << texto; // Imprime en consola
+	    crearReporte(nombreReporte, "", texto); // Escribe en el archivo
+	}
+	else
+		cout << "No hay pasillos registrados.\n" << endl;
+}
+
+void ABBPasillos::reportePasilloMasVisitado()
+{
+    string nombreReporte = "Pasillo(s) mas visitado(s)";
+    string texto = "";
+
+    pnodoPasillo temp = raiz;
+    int maxVisitas = 0;
+
+    // Encuentra el n�mero máximo de visitas
+    while (temp != NULL)
+	{
+        if (temp->contVisitas > maxVisitas)
+            maxVisitas = temp->contVisitas;
+
+        temp = temp->siguiente;
+    }
+
+    temp = raiz;
+
+    // Agrega al texto los pasillos más visitados
+    while (temp != NULL)
+	{
+        if (temp->contVisitas == maxVisitas)
+		{
+            texto += "CodPasillo: " + intAString(temp->codPasillo) +
+                    "\nNombre: " + temp->nombre +
+                    "\nCantidad de visitas: " + intAString(temp->contVisitas) +
+					"\n--------------------------\n\n";
+        }
+
+        temp = temp->siguiente;
+    }
+
+    if (maxVisitas > 0)
+	{
+        cout << "Reporte: " << nombreReporte << endl << endl;
+        cout << texto; // Imprime en consola
+        crearReporte(nombreReporte, "", texto); // Escribe en el archivo
+    }
+	else
+        cout << "No hay pasillos mas visitados.\n" << endl;
+}
+
+void ABBPasillos::reportePasilloMenosVisitado()
+{
+    string nombreReporte = "Pasillo(s) menos visitado(s)";
+    string texto = "";
+
+    pnodoPasillo temp = raiz;
+    int minVisitas = -1;
+
+    // Encuentra el n�mero mínimo de visitas
+    while (temp != NULL)
+	{
+        if (temp->contVisitas >= 1)
+		{
+            if ((minVisitas == -1) || (temp->contVisitas < minVisitas))
+                minVisitas = temp->contVisitas;
+        }
+
+        temp = temp->siguiente;
+    }
+
+    temp = raiz;
+
+	// Agrega al texto los pasillos menos visitados
+    while (temp != NULL)
+	{
+        if (temp->contVisitas == minVisitas)
+		{
+            texto += "CodPasillo: " + intAString(temp->codPasillo) +
+                    "\nNombre: " + temp->nombre +
+                    "\nCantidad de visitas: " + intAString(temp->contVisitas) +
+					"\n--------------------------\n\n";
+        }
+
+        temp = temp->siguiente;
+    }
+
+    if (minVisitas != -1)
+	{
+        cout << "Reporte: " << nombreReporte << endl << endl;
+        cout << texto; // Imprime en consola
+        crearReporte(nombreReporte, "", texto); // Escribe en el archivo
+    }
+	else
+        cout << "No hay pasillos menos visitados.\n" << endl;
+}
 
 void ABBPasillos::PreordenI()
 {
@@ -622,6 +802,85 @@ void AVLProPasillo::Mostrar()
     }
 }
 
+void AVLProPasillo::reporteProductosPasillo()
+{
+    int codigoPasillo;
+    cout << "Ingrese el codigo del pasillo: ";
+    cin >> codigoPasillo;
+
+	string nombreReporte = "Productos de Pasillo";
+    string texto = "";
+
+    pnodoProPasillo temp = primero;
+    bool productoEncontrado = false;
+
+    while (temp != NULL)
+    {
+        if (temp->codPasillo == codigoPasillo)
+        {
+            productoEncontrado = true;
+
+            texto += "-> " + intAString(temp->codPasillo) + "; " +
+					intAString(temp->codProducto) + "; " + temp->nombre + "\n\n";
+        }
+
+        temp = temp->siguiente;
+    }
+
+    if (productoEncontrado)
+    {
+        cout << "\nReporte: " << nombreReporte << endl << endl;
+        cout << texto; // Muestra en consola
+        crearReporte(nombreReporte, ("-" + intAString(codigoPasillo)), texto); // Escribe en el archivo
+    }
+    else
+        cout << "\nNo se encontraron productos en el pasillo.\n" << endl;
+}
+
+void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
+{
+    string nombreReporte = "Producto(s) mas buscado(s)";
+    string texto = "";
+
+    pnodoProPasillo temp = primero;
+    int maxBusquedas = 0;
+
+    // Encuentra el número máximo de b�squedas
+    while (temp != NULL)
+	{
+        if (temp->contBusquedas > maxBusquedas)
+            maxBusquedas = temp->contBusquedas;
+
+        temp = temp->siguiente;
+    }
+
+    temp = primero;
+
+	// Agrega al texto los productos más buscados
+    while (temp != NULL)
+	{
+        if (temp->contBusquedas == maxBusquedas)
+		{
+            texto += "Pasillo: " + intAString(temp->codPasillo) + "; " +
+					arbolPasillos.buscarPasillo(temp->codPasillo)->getNombre() +
+            		"\nProducto: " + intAString(temp->codProducto) + "; " + temp->nombre +
+                    "\nCantidad de busquedas: " + intAString(temp->contBusquedas) +
+					"\n--------------------------\n\n";
+        }
+
+        temp = temp->siguiente;
+    }
+
+    if (maxBusquedas > 0)
+	{
+        cout << "Reporte: " << nombreReporte << endl << endl;
+        cout << texto; // Imprime en consola
+        crearReporte(nombreReporte, "", texto); // Escribe en el archivo
+    }
+    else
+        cout << "No hay productos mas buscados.\n" << endl;
+}
+
 
 class HashingClientes
 {
@@ -761,6 +1020,21 @@ void HashingClientes::modificarCliente(int cedula, string nombre, int codCiudad,
         << nombre << "; " << codCiudad << "; " << telefono << "; " << correo << endl << endl;
 }
 
+void HashingClientes::reporteClientes()
+{
+	string nombreReporte = "Clientes";
+    string texto = mostrarHash();
+
+	if (!hashingVacio())
+	{
+	    cout << "Reporte: " << nombreReporte << endl << endl;
+	    cout << texto; // Imprime en consola
+	    crearReporte(nombreReporte, "", texto); // Escribe en el archivo
+	}
+	else
+		cout << "No hay clientes registrados.\n" << endl;
+}
+
 string HashingClientes::mostrarHash()
 {
     stringstream ss; // Construye la salida como una cadena
@@ -821,7 +1095,6 @@ public:
     pnodoAdmin buscarAdmin(int cedula);
     void modificarAdmin(int cedula, string nombre, int codCiudad, string telefono,
 		string correo, pnodoAdmin admin);
-	void reporteAdmins();
     string mostrarHash();
     bool loginAdmin(int cedula);
 
@@ -1025,7 +1298,6 @@ public:
     pnodoABBCiudad buscarCiudad(int codCiudad);
     void modificarCiudad(int codCiudad, string nombre);
     void mostrarCiudades(pnodoABBCiudad, int);
-    void reporteCiudades();
     void PreordenI();
     void InordenI();
     void PostordenI();
@@ -1299,48 +1571,6 @@ void PilaCiudades::Mostrar()
 
 
 
-int stringAInt(string str)
-{
-    istringstream iss(str);
-    int res;
-    
-    if (!(iss >> res))
-	{
-        cout << "\nNo se pudo convertir la cadena a entero.\n" << endl;
-        return 0;
-    }
-    
-    return res;
-}
-
-string intAString(int num)
-{
-    ostringstream convertir;
-
-    convertir << num;
-
-    return convertir.str();
-}
-
-// Función que convierte "1" o "0" a booleano
-bool stringABool(string str)
-{
-    istringstream iss(str);
-    bool res;
-
-    if (str == "1")
-        return true;
-    else if (str == "0")
-        return false;
-    else
-    {
-        cout << "\nNo se puede convertir la cadena a bool.\n" << endl;
-        return false;
-    }
-}
-
-
-
 void crearArbolPasillos(ABBPasillos &arbolPasillos)
 {
     ifstream archivo("Pasillos.txt");
@@ -1525,285 +1755,6 @@ void crearArbolCiudades(ABBCiudades &arbolCiudades)
         // Inserta en el árbol de ciudades después de las validaciones
         arbolCiudades.insertarCiudad(stringAInt(codCiudad), nombre);
 	}
-}
-
-
-
-void crearReporte(string nombreReporte, string distintivo, string texto)
-{
-	ofstream archivoNuevo;
-	
-	string titulo = "Reporte-" + nombreReporte + distintivo + ".txt";
-	
-	archivoNuevo.open(titulo.c_str(), ios::out);
-	
-	// Comprueba si el archivo se abrió correctamente
-    if (!archivoNuevo.is_open())
-    {
-        cout << "\nError al abrir el archivo para escritura.\n" << endl;
-        return;
-    }
-	
-	archivoNuevo << "Reporte: ";
-	archivoNuevo << nombreReporte << endl << endl;
-	archivoNuevo << texto << endl;
-	
-	cout << "Reporte " << nombreReporte << " creado con exito.\n" << endl;
-	
-	archivoNuevo.close();
-}
-
-void ABBPasillos::reportePasillos()
-{
-    string nombreReporte = "Pasillos";
-    string texto = "";
-
-    // Itera sobre la lista de pasillos y guarda en el archivo
-    pnodoPasillo temp = raiz;
-
-	while (temp != NULL)
-	{
-        texto += "-> " + intAString(temp->codPasillo) + "; " + temp->nombre + "\n\n";
-
-        temp = temp->siguiente;
-    }
-
-    if (!ArbolVacio())
-    {
-	    cout << "Reporte: " << nombreReporte << endl << endl;
-	    cout << texto; // Imprime en consola
-	    crearReporte(nombreReporte, "", texto); // Escribe en el archivo
-	}
-	else
-		cout << "No hay pasillos registrados.\n" << endl;
-}
-
-void AVLProPasillo::reporteProductosPasillo()
-{
-    int codigoPasillo;
-    cout << "Ingrese el codigo del pasillo: ";
-    cin >> codigoPasillo;
-
-	string nombreReporte = "Productos de Pasillo";
-    string texto = "";
-
-    pnodoProPasillo temp = primero;
-    bool productoEncontrado = false;
-
-    while (temp != NULL)
-    {
-        if (temp->codPasillo == codigoPasillo)
-        {
-            productoEncontrado = true;
-
-            texto += "-> " + intAString(temp->codPasillo) + "; " +
-					intAString(temp->codProducto) + "; " + temp->nombre + "\n\n";
-        }
-
-        temp = temp->siguiente;
-    }
-
-    if (productoEncontrado)
-    {
-        cout << "\nReporte: " << nombreReporte << endl << endl;
-        cout << texto; // Muestra en consola
-        crearReporte(nombreReporte, ("-" + intAString(codigoPasillo)), texto); // Escribe en el archivo
-    }
-    else
-        cout << "\nNo se encontraron productos en el pasillo.\n" << endl;
-}
-
-void HashingClientes::reporteClientes()
-{
-	string nombreReporte = "Clientes";
-    string texto = mostrarHash();
-
-	if (!hashingVacio())
-	{
-	    cout << "Reporte: " << nombreReporte << endl << endl;
-	    cout << texto; // Imprime en consola
-	    crearReporte(nombreReporte, "", texto); // Escribe en el archivo
-	}
-	else
-		cout << "No hay clientes registrados.\n" << endl;
-}
-
-void HashingAdmins::reporteAdmins()
-{
-	string nombreReporte = "Administradores";
-	string texto = mostrarHash();
-
-	if (!hashingVacio())
-	{
-	    cout << "Reporte: " << nombreReporte << endl << endl;
-	    cout << texto; // Imprime en consola
-	    crearReporte(nombreReporte, "", texto); // Escribe en el archivo
-	}
-	else
-		cout << "No hay administradores registrados.\n" << endl;
-}
-
-void ABBCiudades::reporteCiudades()
-{
-	string nombreReporte = "Ciudades";
-    string texto = "";
-
-    pnodoCiudad temp = raiz;
-
-	// Itera sobre el arbol de ciudades y guarda en el archivo
-	if (temp != NULL)
-    {
-        pnodoCiudad inicio = temp;
-
-        do
-        {
-            texto += "-> " + intAString(temp->codCiudad) + "; " + temp->nombre + "\n\n";
-
-            temp = temp->siguiente;
-        } while (temp != inicio);
-    }
-
-    if (!ArbolVacio())
-    {
-	    cout << "Reporte: " << nombreReporte << endl << endl;
-	    cout << texto; // Imprime en consola
-	    crearReporte(nombreReporte, "", texto); // Escribe en el archivo
-	}
-	else
-		cout << "No hay ciudades registradas.\n" << endl;
-}
-
-void ABBPasillos::reportePasilloMasVisitado()
-{
-    string nombreReporte = "Pasillo(s) mas visitado(s)";
-    string texto = "";
-
-    pnodoPasillo temp = raiz;
-    int maxVisitas = 0;
-
-    // Encuentra el n�mero máximo de visitas
-    while (temp != NULL)
-	{
-        if (temp->contVisitas > maxVisitas)
-            maxVisitas = temp->contVisitas;
-
-        temp = temp->siguiente;
-    }
-
-    temp = raiz;
-
-    // Agrega al texto los pasillos más visitados
-    while (temp != NULL)
-	{
-        if (temp->contVisitas == maxVisitas)
-		{
-            texto += "CodPasillo: " + intAString(temp->codPasillo) +
-                    "\nNombre: " + temp->nombre +
-                    "\nCantidad de visitas: " + intAString(temp->contVisitas) +
-					"\n--------------------------\n\n";
-        }
-
-        temp = temp->siguiente;
-    }
-
-    if (maxVisitas > 0)
-	{
-        cout << "Reporte: " << nombreReporte << endl << endl;
-        cout << texto; // Imprime en consola
-        crearReporte(nombreReporte, "", texto); // Escribe en el archivo
-    }
-	else
-        cout << "No hay pasillos mas visitados.\n" << endl;
-}
-
-void ABBPasillos::reportePasilloMenosVisitado()
-{
-    string nombreReporte = "Pasillo(s) menos visitado(s)";
-    string texto = "";
-
-    pnodoPasillo temp = raiz;
-    int minVisitas = -1;
-
-    // Encuentra el n�mero mínimo de visitas
-    while (temp != NULL)
-	{
-        if (temp->contVisitas >= 1)
-		{
-            if ((minVisitas == -1) || (temp->contVisitas < minVisitas))
-                minVisitas = temp->contVisitas;
-        }
-
-        temp = temp->siguiente;
-    }
-
-    temp = raiz;
-
-	// Agrega al texto los pasillos menos visitados
-    while (temp != NULL)
-	{
-        if (temp->contVisitas == minVisitas)
-		{
-            texto += "CodPasillo: " + intAString(temp->codPasillo) +
-                    "\nNombre: " + temp->nombre +
-                    "\nCantidad de visitas: " + intAString(temp->contVisitas) +
-					"\n--------------------------\n\n";
-        }
-
-        temp = temp->siguiente;
-    }
-
-    if (minVisitas != -1)
-	{
-        cout << "Reporte: " << nombreReporte << endl << endl;
-        cout << texto; // Imprime en consola
-        crearReporte(nombreReporte, "", texto); // Escribe en el archivo
-    }
-	else
-        cout << "No hay pasillos menos visitados.\n" << endl;
-}
-
-void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
-{
-    string nombreReporte = "Producto(s) mas buscado(s)";
-    string texto = "";
-
-    pnodoProPasillo temp = primero;
-    int maxBusquedas = 0;
-
-    // Encuentra el número máximo de b�squedas
-    while (temp != NULL)
-	{
-        if (temp->contBusquedas > maxBusquedas)
-            maxBusquedas = temp->contBusquedas;
-
-        temp = temp->siguiente;
-    }
-
-    temp = primero;
-
-	// Agrega al texto los productos más buscados
-    while (temp != NULL)
-	{
-        if (temp->contBusquedas == maxBusquedas)
-		{
-            texto += "Pasillo: " + intAString(temp->codPasillo) + "; " +
-					arbolPasillos.buscarPasillo(temp->codPasillo)->getNombre() +
-            		"\nProducto: " + intAString(temp->codProducto) + "; " + temp->nombre +
-                    "\nCantidad de busquedas: " + intAString(temp->contBusquedas) +
-					"\n--------------------------\n\n";
-        }
-
-        temp = temp->siguiente;
-    }
-
-    if (maxBusquedas > 0)
-	{
-        cout << "Reporte: " << nombreReporte << endl << endl;
-        cout << texto; // Imprime en consola
-        crearReporte(nombreReporte, "", texto); // Escribe en el archivo
-    }
-    else
-        cout << "No hay productos mas buscados.\n" << endl;
 }
 
 
