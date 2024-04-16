@@ -84,7 +84,7 @@ private:
     int contBusquedas;
     int FB;
     NodoAVLProPasillo *Hizq, *Hder, *siguiente, *anterior;
-
+    
     friend class PilaProPasillo;
     friend class AVLProPasillo;
 };
