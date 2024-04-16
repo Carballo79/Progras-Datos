@@ -70,9 +70,9 @@ public:
         codPasillo(_codPasillo), codProducto(_codProducto), nombre(_nombre),
         contBusquedas(0), FB(0), Hizq(_Hizq), Hder(_Hder), siguiente(_siguiente),
         anterior(_anterior) {}
-
-    void InsertaBinario(int codPasillo, int codProducto, string nombre);
     
+    void InsertaBinario(int codPasillo, int codProducto, string nombre);
+
     int getCodPasillo() { return codPasillo; }
 	int getCodProducto() { return codProducto; }
 	string getNombre() { return nombre; }
@@ -85,12 +85,27 @@ private:
     int FB;
     NodoAVLProPasillo *Hizq, *Hder, *siguiente, *anterior;
 
-    friend class Pila;
+    friend class PilaProPasillo;
     friend class AVLProPasillo;
 };
 
 typedef NodoAVLProPasillo* pnodoProPasillo;
 typedef NodoAVLProPasillo* pnodoAVLProPasillo;
+
+
+class PilaProPasillo
+{
+public:
+    PilaProPasillo() : plista(NULL) {}
+
+    void Push(pnodoProPasillo);
+    void Mostrar();
+    bool Vacia() { return plista == NULL; }
+    pnodoProPasillo Pop();
+    int Size();
+    
+    pnodoProPasillo plista;
+};
 
 
 class NodoCliente
@@ -439,7 +454,7 @@ void ABBPasillos::reportePasilloMasVisitado()
     pnodoPasillo temp = raiz;
     int maxVisitas = 0;
 
-    // Encuentra el n�mero máximo de visitas
+    // Encuentra el número máximo de visitas
     while (temp != NULL)
 	{
         if (temp->contVisitas > maxVisitas)
@@ -677,60 +692,220 @@ void PilaPasillos::Mostrar()
 class AVLProPasillo
 {
 public:
-    AVLProPasillo() { primero = NULL; }
+    AVLProPasillo() { raiz = NULL; }
     ~AVLProPasillo();
 
-    bool ArbolVacio() { return primero == NULL; }
-    void Mostrar();
-    void insertarProducto(int codPasillo, int codProducto, string nombre,
-        ABBPasillos& listaPasillos);
-    bool productoRepetido(int codProducto);
+    bool ArbolVacio() { return raiz == NULL; }
+    void Equilibrar1(pnodoAVLProPasillo n, bool);
+    void Equilibrar2(pnodoAVLProPasillo n, bool);
+    void insertarProducto(pnodoAVLProPasillo ra, bool Hh, int codPasillo,
+        int codProducto, string nombre, ABBPasillos &arbolPasillos);
+    bool productoRepetido(int codProducto) { return buscarProducto(codProducto) != NULL; }
     pnodoProPasillo buscarProducto(int codProducto);
     void modificarProducto(int codProducto, string nombre);
     void reporteProductosPasillo();
-    void reporteProductoMasBuscado(ABBPasillos &listaPasillos);
+    void reporteProductoMasBuscado(ABBPasillos &arbolPasillos);
+    void mostrarProductos(pnodoAVLProPasillo arbol, int cont);
+    void RotacionDobleIzquierda(pnodoAVLProPasillo n1, pnodoAVLProPasillo n2);
+    void RotacionDobleDerecha(pnodoAVLProPasillo n1, pnodoAVLProPasillo n2);
+    void RotacionSimpleIzquierda(pnodoAVLProPasillo n1, pnodoAVLProPasillo n2);
+    void RotacionSimpleDerecha(pnodoAVLProPasillo n1, pnodoAVLProPasillo n2);
+    void PreordenI();
+    void InordenI();
+    void PostordenI();
+
+    pnodoProPasillo getRaiz() { return raiz; }
+    bool getHh() { return Hh; }
 
 private:
-    pnodoProPasillo primero;
+    pnodoProPasillo raiz;
+    bool Hh;
 };
 
-void AVLProPasillo::insertarProducto(int codPasillo, int codProducto,
-    string nombre, ABBPasillos &arbolPasillos)
+AVLProPasillo::~AVLProPasillo()
 {
-    // Verifica si el producto ya está repetido
-    if (!productoRepetido(codProducto))
+    pnodoProPasillo aux;
+
+    while (raiz)
     {
-        if (arbolPasillos.pasilloRepetido(codPasillo))
-        {
-            // Inserta al inicio después de las validaciones
-            // InsertarFinal(codPasillo, codProducto, nombre);
-            
-            cout << "\nProducto insertado exitosamente." << endl;
-	        cout << "\nProducto nuevo:\n" << codPasillo << "; " << codProducto << "; "
-                << nombre << endl << endl;
-		}
-		else
-			cout << "\nEl pasillo no existe en el arbol.\n" << endl;
+        aux = raiz;
+        raiz = raiz->siguiente;
+        delete aux;
     }
-    else
-    	cout << "\nEl producto ya existe en el pasillo.\n" << endl;
+
+    raiz = NULL;
 }
 
-bool AVLProPasillo::productoRepetido(int codProducto)
+void AVLProPasillo::Equilibrar1(pnodoAVLProPasillo n, bool Hh)
 {
-    pnodoProPasillo aux = primero;
+    pnodoAVLProPasillo n1;
 
-    while (aux != NULL)
+    switch (n->FB)
     {
-        if (aux->codProducto == codProducto)
-            // Si se encuentra el producto, es repetido
-            return true;
+        case -1:
+            n->FB = 0;
+            break;
 
-        aux = aux->siguiente;
+        case 0:
+            n->FB = 1;
+            Hh = false;
+            break;
+
+        case 1:
+            n1 = n->Hder;
+
+            if (n1->FB >= 0)
+            {
+                if (n1->FB == 0)
+                {
+                    Hh = false;
+                    RotacionSimpleDerecha(n, n1);
+                }
+                else
+                    RotacionDobleDerecha(n, n1);
+            }
     }
+}
 
-    // Si no se encuentra, no es repetido
-    return false;
+void AVLProPasillo::Equilibrar2(pnodoAVLProPasillo n, bool Hh)
+{
+    pnodoAVLProPasillo n1;
+
+    switch (n->FB)
+    {
+        case 1:
+            n->FB = 0;
+            break;
+
+        case 0:
+            n->FB = 1;
+            Hh = false;
+            break;
+
+        case -1:
+            n1 = n->Hizq;
+
+            if (n1->FB <= 0)
+            {
+                if (n1->FB == 0)
+                {
+                    Hh = false;
+                    RotacionSimpleIzquierda(n, n1);
+                }
+                else
+                    RotacionDobleIzquierda(n, n1);
+            }
+    }
+}
+
+
+void NodoAVLProPasillo::InsertaBinario(int codPasillo, int llave, string nombre)
+{
+    if (llave < codPasillo)
+    {
+        if (Hizq == NULL)
+        {
+            Hizq = new NodoAVLProPasillo(codPasillo, llave, nombre);
+            cout << "\nProducto insertado exitosamente." << endl;
+            cout << "\nProducto nuevo:\n" << codPasillo << "; " << llave << "; " << nombre << endl;
+        }
+        else
+            Hizq->InsertaBinario(codPasillo, llave, nombre);
+    }
+    else if (llave > codPasillo)
+    {
+        if (Hder == NULL)
+        {
+            Hder = new NodoAVLProPasillo(codPasillo, llave, nombre);
+            cout << "\nProducto insertado exitosamente." << endl;
+            cout << "\nProducto nuevo:\n" << codPasillo << "; " << llave << "; " << nombre << endl;
+        }
+        else
+            Hder->InsertaBinario(codPasillo, llave, nombre);
+    }
+    else
+        cout << "\nEl pasillo ya existe en el arbol.\n" << endl;
+}
+
+
+void AVLProPasillo::insertarProducto(pnodoAVLProPasillo ra, bool Hh, int codPasillo,
+                                     int llave, string nombre, ABBPasillos &arbolPasillos)
+{
+    pnodoAVLProPasillo n1;
+
+    if (raiz == NULL)
+    {
+        ra = new NodoAVLProPasillo(codPasillo, llave, nombre);
+        Hh = true;
+        cout << "\nProducto insertado exitosamente." << endl;
+        cout << "\nProducto nuevo:\n" << codPasillo << "; " << llave << "; " << nombre << endl;
+    }
+    else
+    {
+        if (llave < ra->codProducto)
+        {
+            insertarProducto(ra->Hizq, Hh, codPasillo, llave, nombre, arbolPasillos);
+
+            if (Hh)
+            {
+                switch (ra->codProducto)
+                {
+                    case 1:
+                        ra->FB = 0;
+                        Hh = false;
+                        break;
+
+                    case 0:
+                        ra->FB  = -1;
+                        break;
+
+                    case -1:
+                        n1 = ra->Hizq;
+
+                        if (n1->FB == -1)
+                            RotacionSimpleIzquierda(ra, n1);
+                        else
+                            RotacionDobleIzquierda(ra,n1);
+
+                        Hh = false;
+                        break;
+                }
+            }
+        }
+        else
+        {
+            if (llave > ra->codProducto)
+            {
+                insertarProducto(ra->Hder, Hh, codPasillo, llave, nombre, arbolPasillos);
+
+                if (Hh)
+                {
+                    switch(ra->FB)
+                    {
+                        case -1:
+                            ra->FB = 0;
+                            Hh = false;
+                            break;
+
+                        case 0:
+                            ra->FB = 1;
+                            break;
+
+                        case 1:
+                            n1 = ra->Hder;
+
+                            if (n1->FB == 1)
+                                RotacionSimpleDerecha(ra, n1);
+                            else
+                                RotacionDobleDerecha(ra, n1);
+
+                            Hh = false;
+                            break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 pnodoProPasillo AVLProPasillo::buscarProducto(int codProducto)
@@ -741,20 +916,19 @@ pnodoProPasillo AVLProPasillo::buscarProducto(int codProducto)
         return NULL;
     }
 
-    pnodoProPasillo aux = primero;
+    pnodoAVLProPasillo act = raiz;
 
-    while (aux != NULL)
-	{
-        if (aux->codProducto == codProducto)
-        {
-        	aux->contBusquedas++;
-            return aux;
-    	}
-
-        aux = aux->siguiente;
+    while (act != NULL)
+    {
+        if (codProducto == act->codProducto)
+            return act;
+        else if (codProducto < act->codProducto)
+            act = act->Hizq;
+        else
+            act = act->Hder;
     }
 
-    return NULL;
+    return NULL; // Producto no encontrado
 }
 
 void AVLProPasillo::modificarProducto(int codProducto, string nombre)
@@ -763,7 +937,7 @@ void AVLProPasillo::modificarProducto(int codProducto, string nombre)
 
     if (productoPasillo == NULL)
     {
-        cout << "\nProducto no encontrado.\n" << endl;
+        cout << "El producto no existe en el arbol." << endl;
         return;
     }
 
@@ -774,31 +948,19 @@ void AVLProPasillo::modificarProducto(int codProducto, string nombre)
     cout << "\nProducto modificado:\n" << codProducto << "; " << nombre << endl << endl;
 }
 
-AVLProPasillo::~AVLProPasillo()
+void AVLProPasillo::mostrarProductos(pnodoAVLProPasillo arbol, int cont)
 {
-    pnodoProPasillo aux;
-
-    while (primero)
+    if (arbol != NULL)
     {
-        aux = primero;
-        primero = primero->siguiente;
-        delete aux;
-    }
+        mostrarProductos(arbol->Hder, cont + 1);
 
-    primero = NULL;
-}
+        for (int i = 0; i < cont; i++)
+            cout << "   ";
 
-void AVLProPasillo::Mostrar()
-{
-    pnodoProPasillo aux;
-    aux = primero;
+        cout << arbol->codPasillo << "; " << arbol->codProducto << "; "
+            << arbol->nombre << endl << endl;
 
-    while (aux)
-    {
-        cout << "-> " << aux->codPasillo << "; " << aux->codProducto << "; "
-			<< aux->nombre << endl << endl;
-        
-		aux = aux->siguiente;
+        mostrarProductos(arbol->Hizq, cont + 1);
     }
 }
 
@@ -811,7 +973,7 @@ void AVLProPasillo::reporteProductosPasillo()
 	string nombreReporte = "Productos de Pasillo";
     string texto = "";
 
-    pnodoProPasillo temp = primero;
+    pnodoProPasillo temp = raiz;
     bool productoEncontrado = false;
 
     while (temp != NULL)
@@ -842,10 +1004,10 @@ void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
     string nombreReporte = "Producto(s) mas buscado(s)";
     string texto = "";
 
-    pnodoProPasillo temp = primero;
+    pnodoProPasillo temp = raiz;
     int maxBusquedas = 0;
 
-    // Encuentra el número máximo de b�squedas
+    // Encuentra el número máximo de búsquedas
     while (temp != NULL)
 	{
         if (temp->contBusquedas > maxBusquedas)
@@ -854,7 +1016,7 @@ void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
         temp = temp->siguiente;
     }
 
-    temp = primero;
+    temp = raiz;
 
 	// Agrega al texto los productos más buscados
     while (temp != NULL)
@@ -880,6 +1042,93 @@ void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
     else
         cout << "No hay productos mas buscados.\n" << endl;
 }
+
+void AVLProPasillo::RotacionDobleIzquierda(pnodoAVLProPasillo n, pnodoAVLProPasillo n1)
+{
+    pnodoAVLProPasillo n2;
+
+    n2 = n1->Hder;
+    n->Hizq = n2->Hder;
+    n2->Hder = n;
+    n1->Hder = n2->Hizq;
+    n2->Hizq = n1;
+
+    if (n2->FB == 1)
+        n1->FB = -1;
+    else
+        n1->FB = 0;
+    
+    if (n2->FB == -1)
+        n->FB = 1;
+    else
+        n->FB=0;
+
+    n2->FB = 0;
+    n = n2;
+}
+
+void AVLProPasillo::RotacionDobleDerecha(pnodoAVLProPasillo n, pnodoAVLProPasillo n1)
+{
+    pnodoAVLProPasillo n2;
+
+    n2 = n1->Hizq;
+    n->Hder = n2->Hizq;
+    n2->Hizq = n;
+    n1->Hizq = n2->Hder;
+    n2->Hder = n1;
+
+    if (n2->FB == 1)
+        n->FB = -1;
+    else
+        n->FB = 0;
+
+    if (n2->FB == -1)
+        n1->FB = 1;
+    else
+        n1->FB = 0;
+
+    n2->FB = 0;
+    n = n2;
+}
+
+void AVLProPasillo::RotacionSimpleDerecha(pnodoAVLProPasillo n, pnodoAVLProPasillo n1)
+{
+    n->Hder = n1->Hizq;
+    n1->Hizq = n;
+
+    if (n1->FB == 1)
+    {
+        n->FB = 0;
+        n1->FB = 0;
+    }
+    else
+    {
+        n->FB = 1;
+        n1->FB = -1;
+    }
+
+    n = n1;
+}
+
+void AVLProPasillo::RotacionSimpleIzquierda(pnodoAVLProPasillo n, pnodoAVLProPasillo n1)
+{
+    n->Hizq = n1->Hder;
+    n1->Hder = n;
+
+    if (n1->FB == -1)
+    {
+        n->FB = 0;
+        n1->FB = 0;
+    }
+    else
+    {
+        n->FB = -1;
+        n1->FB = -1;
+    }
+
+    n = n1;
+}
+
 
 
 class HashingClientes
@@ -1631,10 +1880,10 @@ void crearArbolProPasillo(AVLProPasillo &arbolProPasillo, ABBPasillos &arbolPasi
         ss >> ws;
         getline(ss, nombre, ';');
         ss >> ws;
-
-        // Inserta en la lista doble de productos después de las validaciones
-        arbolProPasillo.insertarProducto(stringAInt(codPasillo), stringAInt(codProducto),
-            nombre, arbolPasillos);
+        
+        // Inserta en el árbol AVL después de las validaciones
+        arbolProPasillo.insertarProducto(arbolProPasillo.getRaiz(), arbolProPasillo.getHh(),
+            stringAInt(codPasillo), stringAInt(codProducto), nombre, arbolPasillos);
     }
 
     archivo.close();
@@ -1835,7 +2084,9 @@ void menuInsertar(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arbolPr
 				cin.ignore();
 				getline(cin, nombre);
                 
-				arbolProPasillo.insertarProducto(codPasillo, codProducto, nombre, arbolPasillos); 
+				// Inserta en el árbol AVL después de las validaciones
+                arbolProPasillo.insertarProducto(arbolProPasillo.getRaiz(), arbolProPasillo.getHh(),
+                    codPasillo, codProducto, nombre, arbolPasillos);
 				break;
 			}
 
@@ -2448,7 +2699,7 @@ void menuListar(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arbolProP
             case 2:
                 system(LIMPIAR);
             	cout << "Productos:\n" << endl;
-                arbolProPasillo.Mostrar();
+                arbolProPasillo.mostrarProductos(arbolProPasillo.getRaiz(), 0);
                 break;
 
             case 3:
