@@ -1,4 +1,4 @@
-// Estudiantes: Jos√© Carballo Mart√≠nez y Kevin Espinoza Barrantes
+// Estudiantes: JosÈ Carballo MartÌnez y Kevin Espinoza Barrantes
 
 #include <iostream>
 #include <cstdlib>
@@ -37,28 +37,12 @@ private:
     string nombre;
     int contVisitas;
     NodoABBPasillo *Hizq, *Hder, *siguiente, *anterior;
-
-    friend class PilaPasillos;
+    
     friend class ABBPasillos;
 };
 
 typedef NodoABBPasillo *pnodoPasillo;
 typedef NodoABBPasillo *pnodoABBPasillo;
-
-
-class PilaPasillos
-{
-public:
-    PilaPasillos(): plista(NULL) {}
-
-    void Push(pnodoPasillo);
-    void Mostrar();
-    bool Vacia() { return plista == NULL; }
-    pnodoPasillo Pop();
-    int Size();
-    
-    pnodoPasillo plista;
-};
 
 
 class NodoAVLProPasillo
@@ -85,27 +69,11 @@ private:
     int FB;
     NodoAVLProPasillo *Hizq, *Hder, *siguiente, *anterior;
     
-    friend class PilaProPasillo;
     friend class AVLProPasillo;
 };
 
 typedef NodoAVLProPasillo* pnodoProPasillo;
 typedef NodoAVLProPasillo* pnodoAVLProPasillo;
-
-
-class PilaProPasillo
-{
-public:
-    PilaProPasillo() : plista(NULL) {}
-
-    void Push(pnodoProPasillo);
-    void Mostrar();
-    bool Vacia() { return plista == NULL; }
-    pnodoProPasillo Pop();
-    int Size();
-    
-    pnodoProPasillo plista;
-};
 
 
 class NodoCliente
@@ -136,7 +104,6 @@ private:
     NodoCliente* siguiente; // Clase de Autoreferencia
 
     friend class HashingClientes;
-    friend class ListaCircularCiudades;
 };
 
 typedef NodoCliente *pnodoCliente;
@@ -170,7 +137,6 @@ private:
     NodoAdmin* siguiente; // Clase de Autoreferencia
 
     friend class HashingAdmins;
-    friend class ListaCircularCiudades;
 };
 
 typedef NodoAdmin *pnodoAdmin;
@@ -196,28 +162,12 @@ private:
     int codCiudad;
     string nombre;
     NodoABBCiudad *Hizq, *Hder, *siguiente, *anterior;
-
-    friend class PilaCiudades;
+    
     friend class ABBCiudades;
 };
 
 typedef NodoABBCiudad *pnodoCiudad;
 typedef NodoABBCiudad *pnodoABBCiudad;
-
-
-class PilaCiudades
-{
-public:
-    PilaCiudades() : plista(NULL) {}
-
-    void Push(pnodoCiudad);
-    void Mostrar();
-    bool Vacia() { return plista == NULL; }
-    pnodoCiudad Pop();
-    int Size();
-    
-    pnodoCiudad plista;
-};
 
 
 
@@ -244,7 +194,7 @@ string intAString(int num)
     return convertir.str();
 }
 
-// Funci√≥n que convierte "1" o "0" a booleano
+// FunciÛn que convierte "1" o "0" a booleano
 bool stringABool(string str)
 {
     istringstream iss(str);
@@ -270,7 +220,7 @@ void crearReporte(string nombreReporte, string distintivo, string texto)
 	
 	archivoNuevo.open(titulo.c_str(), ios::out);
 	
-	// Comprueba si el archivo se abri√≥ correctamente
+	// Comprueba si el archivo se abriÛ correctamente
     if (!archivoNuevo.is_open())
     {
         cout << "\nError al abrir el archivo para escritura.\n" << endl;
@@ -303,9 +253,6 @@ public:
     void reportePasillos();
     void reportePasilloMasVisitado();
     void reportePasilloMenosVisitado();
-    void PreordenI();
-    void InordenI();
-    void PostordenI();
 
     pnodoABBPasillo getRaiz() { return raiz; }
 
@@ -371,7 +318,7 @@ pnodoABBPasillo ABBPasillos::buscarPasillo(int codPasillo)
 {
     if (ArbolVacio())
     {
-        cout << "\nEl arbol de pasillos esta vacia.\n" << endl;
+        cout << "\nEl arbol de pasillos esta vacio.\n" << endl;
         return NULL;
     }
 
@@ -454,7 +401,7 @@ void ABBPasillos::reportePasilloMasVisitado()
     pnodoPasillo temp = raiz;
     int maxVisitas = 0;
 
-    // Encuentra el n√∫mero m√°ximo de visitas
+    // Encuentra el n˙mero m·ximo de visitas
     while (temp != NULL)
 	{
         if (temp->contVisitas > maxVisitas)
@@ -465,7 +412,7 @@ void ABBPasillos::reportePasilloMasVisitado()
 
     temp = raiz;
 
-    // Agrega al texto los pasillos m√°s visitados
+    // Agrega al texto los pasillos m·s visitados
     while (temp != NULL)
 	{
         if (temp->contVisitas == maxVisitas)
@@ -497,7 +444,7 @@ void ABBPasillos::reportePasilloMenosVisitado()
     pnodoPasillo temp = raiz;
     int minVisitas = -1;
 
-    // Encuentra el n√∫mero m√≠nimo de visitas
+    // Encuentra el n˙mero mÌnimo de visitas
     while (temp != NULL)
 	{
         if (temp->contVisitas >= 1)
@@ -535,159 +482,6 @@ void ABBPasillos::reportePasilloMenosVisitado()
         cout << "No hay pasillos menos visitados.\n" << endl;
 }
 
-void ABBPasillos::PreordenI()
-{
-    pnodoABBPasillo act = raiz;
-    PilaPasillos p;
-    
-    while ((p.Vacia() == false) || (act != NULL))
-    {
-        if (act != NULL)
-        {
-            cout << act->codPasillo << "; " << act->nombre << " - ";
-            p.Push(act);
-            act = act->Hizq;
-        }
-        else
-        {
-            act = p.Pop();
-            act = act->Hder;
-        }
-    }
-}
-
-void ABBPasillos::InordenI()
-{
-    pnodoABBPasillo act = raiz;
-    PilaPasillos p;
-    bool band = true;
-
-    while(band)
-    {
-        while(act != NULL)
-        {
-            p.Push(act);
-            act = act->Hizq;
-        }
-
-        if (!p.Vacia())
-        {
-            act = p.Pop();
-            cout << act->codPasillo << "; " << act->nombre <<" - ";
-            act = act->Hder;          
-        }
-
-        if (p.Vacia() && (act == NULL))
-            break;
-    }
-}
-
-void ABBPasillos::PostordenI()
-{
-    pnodoABBPasillo act = raiz;
-    PilaPasillos p1, p2;
-
-    while(!p1.Vacia() || (act != NULL))
-    {
-        if (act != NULL)
-        {
-            p2.Push(new NodoABBPasillo(act->codPasillo, act->nombre));            
-            p2.Push(act);
-            act = act->Hder;
-        }
-        else
-        {
-            act = p1.Pop();
-            act = act->Hizq;
-        }
-    }
-
-    while(!p2.Vacia())
-    {
-        pnodoABBPasillo salida = p2.Pop();
-        cout<< salida->codPasillo << "; " << salida->nombre << " - ";
-    }
-}
-
-void PilaPasillos::Push(pnodoPasillo v)
-{
-    if (Vacia())
-        plista = v;
-    else
-    {
-        pnodoPasillo aux = plista;
-        while (aux->siguiente)
-            aux = aux->siguiente;
-
-        aux->siguiente = v;
-        v->anterior = aux;
-    }
-}
-
-pnodoPasillo PilaPasillos::Pop()
-{
-    pnodoABBPasillo borrar;
-    pnodoABBPasillo salida;
-
-    if (Vacia())
-        cout<<"Pila Vacia"<<endl;
-    else
-    {
-        borrar = plista;
-
-        while(borrar->siguiente)
-            borrar = borrar->siguiente;
-
-        if (Size() > 1)
-        {
-            salida = borrar;
-            borrar->anterior->siguiente = NULL;
-            borrar = NULL;
-            delete borrar;
-        }
-        else
-        {
-            salida =plista;        
-            plista = NULL;
-        }
-    }
-    
-    return salida;
-}
-
-int PilaPasillos::Size()
-{
-    while(plista && plista->anterior)
-        plista = plista->anterior;
-
-    int cont = 0;
-    pnodoABBPasillo aux;
-    aux = plista;
-    
-    while(aux)
-    {
-        cont++;
-        aux = aux->siguiente;
-    }
-
-    return cont;
-}
-
-void PilaPasillos::Mostrar()
-{
-    if (Vacia())
-        cout << "La pila esta vacia." << endl;
-
-    pnodoABBPasillo aux = plista;
-
-    while (aux)
-    {
-        cout << aux->codPasillo << "; " << aux->nombre <<" - ";
-
-        aux = aux->siguiente;
-    }
-}
-
 
 class AVLProPasillo
 {
@@ -698,8 +492,9 @@ public:
     bool ArbolVacio() { return raiz == NULL; }
     void Equilibrar1(pnodoAVLProPasillo n, bool);
     void Equilibrar2(pnodoAVLProPasillo n, bool);
-    void insertarProducto(pnodoAVLProPasillo ra, bool Hh, int codPasillo,
-        int codProducto, string nombre, ABBPasillos &arbolPasillos);
+    void insertarProducto(int codPasillo, int llave, string nombre, ABBPasillos &arbolPasillos);
+    void InsertarBalanceado(pnodoAVLProPasillo &ra, bool &Hh, int codPasillo,
+        int codProducto, string nombre);
     bool productoRepetido(int codProducto) { return buscarProducto(codProducto) != NULL; }
     pnodoProPasillo buscarProducto(int codProducto);
     void modificarProducto(int codProducto, string nombre);
@@ -710,9 +505,6 @@ public:
     void RotacionDobleDerecha(pnodoAVLProPasillo n1, pnodoAVLProPasillo n2);
     void RotacionSimpleIzquierda(pnodoAVLProPasillo n1, pnodoAVLProPasillo n2);
     void RotacionSimpleDerecha(pnodoAVLProPasillo n1, pnodoAVLProPasillo n2);
-    void PreordenI();
-    void InordenI();
-    void PostordenI();
 
     pnodoProPasillo getRaiz() { return raiz; }
     bool getHh() { return Hh; }
@@ -798,121 +590,83 @@ void AVLProPasillo::Equilibrar2(pnodoAVLProPasillo n, bool Hh)
     }
 }
 
-
-void NodoAVLProPasillo::InsertaBinario(int codPasillo, int llave, string nombre)
+void AVLProPasillo::insertarProducto(int codPasillo, int llave, string nombre, ABBPasillos &arbolPasillos)
 {
-    if (llave < codPasillo)
-    {
-        if (Hizq == NULL)
-        {
-            Hizq = new NodoAVLProPasillo(codPasillo, llave, nombre);
-            cout << "\nProducto insertado exitosamente." << endl;
-            cout << "\nProducto nuevo:\n" << codPasillo << "; " << llave << "; " << nombre << endl;
-        }
-        else
-            Hizq->InsertaBinario(codPasillo, llave, nombre);
-    }
-    else if (llave > codPasillo)
-    {
-        if (Hder == NULL)
-        {
-            Hder = new NodoAVLProPasillo(codPasillo, llave, nombre);
-            cout << "\nProducto insertado exitosamente." << endl;
-            cout << "\nProducto nuevo:\n" << codPasillo << "; " << llave << "; " << nombre << endl;
-        }
-        else
-            Hder->InsertaBinario(codPasillo, llave, nombre);
-    }
-    else
-        cout << "\nEl pasillo ya existe en el arbol.\n" << endl;
+    bool Hh = false;
+    
+    if (arbolPasillos.pasilloRepetido(codPasillo))
+		InsertarBalanceado(raiz, Hh, codPasillo, llave, nombre);
+	else
+		cout << "\nEl pasillo no existe.\n" << endl;
 }
 
-
-void AVLProPasillo::insertarProducto(pnodoAVLProPasillo ra, bool Hh, int codPasillo,
-                                     int llave, string nombre, ABBPasillos &arbolPasillos)
+void AVLProPasillo::InsertarBalanceado(pnodoAVLProPasillo &ra, bool &Hh, int codPasillo,
+	int llave, string nombre)
 {
-    pnodoAVLProPasillo n1;
-
-    if (raiz == NULL)
-    {
+    if (ra == NULL)
+	{
         ra = new NodoAVLProPasillo(codPasillo, llave, nombre);
         Hh = true;
+        
         cout << "\nProducto insertado exitosamente." << endl;
-        cout << "\nProducto nuevo:\n" << codPasillo << "; " << llave << "; " << nombre << endl;
+        cout << "\nProducto nuevo:\n" << codPasillo << "; " << llave << "; " << nombre << endl << endl;
     }
-    else
-    {
-        if (llave < ra->codProducto)
-        {
-            insertarProducto(ra->Hizq, Hh, codPasillo, llave, nombre, arbolPasillos);
-
-            if (Hh)
-            {
-                switch (ra->codProducto)
-                {
-                    case 1:
-                        ra->FB = 0;
-                        Hh = false;
-                        break;
-
-                    case 0:
-                        ra->FB  = -1;
-                        break;
-
-                    case -1:
-                        n1 = ra->Hizq;
-
-                        if (n1->FB == -1)
-                            RotacionSimpleIzquierda(ra, n1);
-                        else
-                            RotacionDobleIzquierda(ra,n1);
-
-                        Hh = false;
-                        break;
-                }
-            }
-        }
-        else
-        {
-            if (llave > ra->codProducto)
-            {
-                insertarProducto(ra->Hder, Hh, codPasillo, llave, nombre, arbolPasillos);
-
-                if (Hh)
-                {
-                    switch(ra->FB)
-                    {
-                        case -1:
-                            ra->FB = 0;
-                            Hh = false;
-                            break;
-
-                        case 0:
-                            ra->FB = 1;
-                            break;
-
-                        case 1:
-                            n1 = ra->Hder;
-
-                            if (n1->FB == 1)
-                                RotacionSimpleDerecha(ra, n1);
-                            else
-                                RotacionDobleDerecha(ra, n1);
-
-                            Hh = false;
-                            break;
-                    }
-                }
+	else if (llave < ra->codProducto)
+	{
+        InsertarBalanceado(ra->Hizq, Hh, codPasillo, llave, nombre);
+        
+        if (Hh)
+		{
+            switch (ra->FB)
+			{
+                case 1:
+                    ra->FB = 0;
+                    Hh = false;
+                    break;
+                    
+                case 0:
+                    ra->FB = -1;
+                    break;
+                    
+                case -1:
+                    Equilibrar1(ra, Hh);
+                    break;
             }
         }
     }
+	else if (llave > ra->codProducto)
+	{
+        InsertarBalanceado(ra->Hder, Hh, codPasillo, llave, nombre);
+        
+        if (Hh)
+		{
+            switch (ra->FB)
+			{
+                case -1:
+                    ra->FB = 0;
+                    Hh = false;
+                    break;
+                    
+                case 0:
+                    ra->FB = 1;
+                    break;
+                    
+                case 1:
+                    Equilibrar2(ra, Hh);
+                    break;
+            }
+        }
+    }
+	else
+        cout << "\nEl produco ya existe en el arbol.\n" << endl;
 }
+
 
 pnodoProPasillo AVLProPasillo::buscarProducto(int codProducto)
 {
     if (ArbolVacio())
 	{
-        cout << "\nEl arbol de pasillos esta vacia.\n" << endl;
+        cout << "\nEl arbol de productos esta vacio.\n" << endl;
         return NULL;
     }
 
@@ -1007,7 +761,7 @@ void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
     pnodoProPasillo temp = raiz;
     int maxBusquedas = 0;
 
-    // Encuentra el n√∫mero m√°ximo de b√∫squedas
+    // Encuentra el n˙mero m·ximo de b˙squedas
     while (temp != NULL)
 	{
         if (temp->contBusquedas > maxBusquedas)
@@ -1018,7 +772,7 @@ void AVLProPasillo::reporteProductoMasBuscado(ABBPasillos &arbolPasillos)
 
     temp = raiz;
 
-	// Agrega al texto los productos m√°s buscados
+	// Agrega al texto los productos m·s buscados
     while (temp != NULL)
 	{
         if (temp->contBusquedas == maxBusquedas)
@@ -1130,7 +884,6 @@ void AVLProPasillo::RotacionSimpleIzquierda(pnodoAVLProPasillo n, pnodoAVLProPas
 }
 
 
-
 class HashingClientes
 {
 public:
@@ -1182,7 +935,7 @@ HashingClientes::~HashingClientes()
     delete[] tablaHash;
 }
 
-// M√©todo para comprobar si el hashing abierto est√° vac√≠o
+// MÈtodo para comprobar si el hashing abierto est· vacÌo
 bool HashingClientes::hashingVacio()
 {
     for (int i = 0; i < 13; i++)
@@ -1194,7 +947,7 @@ bool HashingClientes::hashingVacio()
     return true;
 }
 
-// M√©todo que inserta un nuevo cliente en la tabla hash
+// MÈtodo que inserta un nuevo cliente en la tabla hash
 void HashingClientes::insertarCliente(int cedula, string nombre, int codCiudad,
 	string telefono, string correo)
 {
@@ -1205,12 +958,12 @@ void HashingClientes::insertarCliente(int cedula, string nombre, int codCiudad,
         return;
     }
         
-    // Aplica la funci√≥n de hashing
+    // Aplica la funciÛn de hashing
     int indice = funcionHash(cedula);
 
     pnodoCliente clienteNuevo = new NodoCliente(cedula, nombre, codCiudad, telefono, correo);
 
-    // Verifica si ya hay un nodo en esa posici√≥n
+    // Verifica si ya hay un nodo en esa posiciÛn
     if (tablaHash[indice] == NULL)
         tablaHash[indice] = clienteNuevo;
     else
@@ -1379,7 +1132,7 @@ HashingAdmins::~HashingAdmins()
     delete[] tablaHash;
 }
 
-// M√©todo para comprobar si el hashing abierto estÔøΩ vacÔøΩo
+// MÈtodo para comprobar si el hashing abierto est· vacÌo
 bool HashingAdmins::hashingVacio()
 {
     for (int i = 0; i < 13; i++)
@@ -1391,7 +1144,7 @@ bool HashingAdmins::hashingVacio()
     return true;
 }
 
-// MÔøΩtodo que inserta un nuevo administrador en la tabla hash
+// MÈtodo que inserta un nuevo administrador en la tabla hash
 void HashingAdmins::insertarAdmin(int cedula, string nombre, int codCiudad,	string telefono,
 	string correo)
 {
@@ -1402,12 +1155,12 @@ void HashingAdmins::insertarAdmin(int cedula, string nombre, int codCiudad,	stri
         return;
     }
     
-    // Aplica la funci√≥n de hashing
+    // Aplica la funciÛn de hashing
     int indice = funcionHash(cedula);
 
     pnodoAdmin nuevoAdmin = new NodoAdmin(cedula, nombre, codCiudad, telefono, correo);
 
-    // Verifica si ya hay un nodo en esa posici√≥n
+    // Verifica si ya hay un nodo en esa posiciÛn
     if (tablaHash[indice] == NULL)
         tablaHash[indice] = nuevoAdmin;
     else
@@ -1547,9 +1300,6 @@ public:
     pnodoABBCiudad buscarCiudad(int codCiudad);
     void modificarCiudad(int codCiudad, string nombre);
     void mostrarCiudades(pnodoABBCiudad, int);
-    void PreordenI();
-    void InordenI();
-    void PostordenI();
 
     pnodoABBCiudad getRaiz() { return raiz; }
 
@@ -1615,7 +1365,7 @@ pnodoABBCiudad ABBCiudades::buscarCiudad(int codCiudad)
 {
     if (ArbolVacio())
     {
-        cout << "\nEl arbol de pasillos esta vacia.\n" << endl;
+        cout << "\nEl arbol de pasillos esta vacio.\n" << endl;
         return NULL;
     }
 
@@ -1666,159 +1416,6 @@ void ABBCiudades::mostrarCiudades(pnodoABBCiudad arbol, int cont)
 }
 
 
-void ABBCiudades::PreordenI()
-{
-    pnodoABBCiudad act = raiz;
-    PilaCiudades p;
-    
-    while ((p.Vacia() == false) || (act != NULL))
-    {
-        if (act != NULL)
-        {
-            cout << act->codCiudad << "; " << act->nombre << " - ";
-            p.Push(act);
-            act = act->Hizq;
-        }
-        else
-        {
-            act = p.Pop();
-            act = act->Hder;
-        }
-    }
-}
-
-void ABBCiudades::InordenI()
-{
-    pnodoABBCiudad act = raiz;
-    PilaCiudades p;
-    bool band = true;
-
-    while(band)
-    {
-        while(act != NULL)
-        {
-            p.Push(act);
-            act = act->Hizq;
-        }
-
-        if (!p.Vacia())
-        {
-            act = p.Pop();
-            cout << act->codCiudad << "; " << act->nombre <<" - ";
-            act = act->Hder;          
-        }
-
-        if (p.Vacia() && (act == NULL))
-            break;
-    }
-}
-
-void ABBCiudades::PostordenI()
-{
-    pnodoABBCiudad act = raiz;
-    PilaCiudades p1, p2;
-
-    while(!p1.Vacia() || (act != NULL))
-    {
-        if (act != NULL)
-        {
-            p2.Push(new NodoABBCiudad(act->codCiudad, act->nombre));            
-            p2.Push(act);
-            act = act->Hder;
-        }
-        else
-        {
-            act = p1.Pop();
-            act = act->Hizq;
-        }
-    }
-
-    while(!p2.Vacia())
-    {
-        pnodoABBCiudad salida = p2.Pop();
-        cout<< salida->codCiudad << "; " << salida->nombre << " - ";
-    }
-}
-
-void PilaCiudades::Push(pnodoCiudad v)
-{
-    if (Vacia())
-        plista = v;
-    else
-    {
-        pnodoCiudad aux = plista;
-        while (aux->siguiente)
-            aux = aux->siguiente;
-
-        aux->siguiente = v;
-        v->anterior = aux;
-    }
-}
-
-pnodoCiudad PilaCiudades::Pop()
-{
-    pnodoABBCiudad borrar;
-    pnodoABBCiudad salida;
-
-    if (Vacia())
-        cout<<"Pila Vacia"<<endl;
-    else
-    {
-        borrar = plista;
-
-        while(borrar->siguiente)
-            borrar = borrar->siguiente;
-
-        if (Size() > 1)
-        {
-            salida = borrar;
-            borrar->anterior->siguiente = NULL;
-            borrar = NULL;
-            delete borrar;
-        }
-        else
-        {
-            salida =plista;        
-            plista = NULL;
-        }
-    }    
-    return salida;
-}
-
-int PilaCiudades::Size()
-{
-    while(plista && plista->anterior)
-        plista = plista->anterior;
-
-    int cont = 0;
-    pnodoABBCiudad aux;
-    aux = plista;
-    
-    while(aux)
-    {
-        cont++;
-        aux = aux->siguiente;
-    }
-
-    return cont;
-}
-
-void PilaCiudades::Mostrar()
-{
-    if (Vacia())
-        cout << "La pila esta vacia." << endl;
-
-    pnodoABBCiudad aux = plista;
-
-    while (aux)
-    {
-        cout << aux->codCiudad << "; " << aux->nombre <<" - ";
-
-        aux = aux->siguiente;
-    }
-}
-
-
 
 void crearArbolPasillos(ABBPasillos &arbolPasillos)
 {
@@ -1834,7 +1431,7 @@ void crearArbolPasillos(ABBPasillos &arbolPasillos)
 
     while (getline(archivo, linea))
     {
-        // Ignora l√≠neas vac√≠as
+        // Ignora lÌneas vacÌas
         if (linea == "")
             continue;
 
@@ -1846,7 +1443,7 @@ void crearArbolPasillos(ABBPasillos &arbolPasillos)
         getline(ss, nombre, ';');
         ss >> ws;
 
-        // Inserta en el √°rbol de pasillos despu√©s de las validaciones
+        // Inserta en el ·rbol de pasillos despuÈs de las validaciones
         arbolPasillos.insertarPasillo(stringAInt(codPasillo), nombre);
     }
 
@@ -1867,7 +1464,7 @@ void crearArbolProPasillo(AVLProPasillo &arbolProPasillo, ABBPasillos &arbolPasi
 
     while (getline(archivo, linea))
     {
-        // Ignora l√≠neas vac√≠as
+        // Ignora lÌneas vacÌas
         if (linea == "")
             continue;
 
@@ -1881,9 +1478,8 @@ void crearArbolProPasillo(AVLProPasillo &arbolProPasillo, ABBPasillos &arbolPasi
         getline(ss, nombre, ';');
         ss >> ws;
         
-        // Inserta en el √°rbol AVL despu√©s de las validaciones
-        arbolProPasillo.insertarProducto(arbolProPasillo.getRaiz(), arbolProPasillo.getHh(),
-            stringAInt(codPasillo), stringAInt(codProducto), nombre, arbolPasillos);
+        // Inserta en el ·rbol AVL despuÈs de las validaciones
+        arbolProPasillo.insertarProducto(stringAInt(codPasillo), stringAInt(codProducto), nombre, arbolPasillos);
     }
 
     archivo.close();
@@ -1903,7 +1499,7 @@ void crearHashingClientes(HashingClientes &hashClientes, ABBCiudades &arbolCiuda
 
     while (getline(archivo, linea))
 	{
-        // Ignora l√≠neas vac√≠as
+        // Ignora lÌneas vacÌas
         if (linea == "")
             continue;
 
@@ -1922,7 +1518,7 @@ void crearHashingClientes(HashingClientes &hashClientes, ABBCiudades &arbolCiuda
         ss >> ws;
 
         if (arbolCiudades.ciudadRepetida(stringAInt(codCiudad)))
-			// Inserta en el hash de clientes despu√©s de las validaciones
+			// Inserta en el hash de clientes despuÈs de las validaciones
 	        hashClientes.insertarCliente(stringAInt(cedula), nombre, stringAInt(codCiudad),
 				telefono, correo);
 		else
@@ -1946,7 +1542,7 @@ void crearHashingAdmins(HashingAdmins &hashAdmins, ABBCiudades &arbolCiudades)
 
     while (getline(archivo, linea))
 	{
-        // Ignora l√≠neas vac√≠as
+        // Ignora lÌneas vacÌas
         if (linea == "")
             continue;
 
@@ -1989,7 +1585,7 @@ void crearArbolCiudades(ABBCiudades &arbolCiudades)
 	
 	while (getline(archivo, linea))
 	{
-	    // Ignora l√≠neas vac√≠as
+	    // Ignora lÌneas vacÌas
 	    if (linea == "")
 	        continue;
 
@@ -2001,7 +1597,7 @@ void crearArbolCiudades(ABBCiudades &arbolCiudades)
         getline(ss, nombre, ';');
         ss >> ws;
 
-        // Inserta en el √°rbol de ciudades despu√©s de las validaciones
+        // Inserta en el ·rbol de ciudades despuÈs de las validaciones
         arbolCiudades.insertarCiudad(stringAInt(codCiudad), nombre);
 	}
 }
@@ -2084,9 +1680,8 @@ void menuInsertar(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arbolPr
 				cin.ignore();
 				getline(cin, nombre);
                 
-				// Inserta en el √°rbol AVL despu√©s de las validaciones
-                arbolProPasillo.insertarProducto(arbolProPasillo.getRaiz(), arbolProPasillo.getHh(),
-                    codPasillo, codProducto, nombre, arbolPasillos);
+				// Inserta en el ·rbol AVL despuÈs de las validaciones
+                arbolProPasillo.insertarProducto(codPasillo, codProducto, nombre, arbolPasillos);
 				break;
 			}
 
@@ -2355,7 +1950,7 @@ void menuBuscarAdmins(int opcion, ABBPasillos &arbolPasillos, AVLProPasillo &arb
                     cout << "\nProducto encontrado:\n" << productoBuscado->getCodPasillo() << "; "
                         << productoBuscado->getCodProducto() << "; " << productoBuscado->getNombre() << endl << endl;
 				else
-                    cout << "\nPasillo no encontrado.\n" << endl;
+                    cout << "\nProducto no encontrado.\n" << endl;
                 break;
 			}
 
